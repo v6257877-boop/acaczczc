@@ -1,0 +1,2094 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>卒中复康助手 · 脑卒中康复动作指导</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230E8A8A'/%3E%3Cg stroke='%23fff' stroke-width='3.4' stroke-linecap='round'%3E%3Cline x1='32' y1='10' x2='32' y2='22'/%3E%3Cline x1='32' y1='22' x2='20' y2='34'/%3E%3Cline x1='32' y1='22' x2='44' y2='34'/%3E%3Cline x1='32' y1='34' x2='20' y2='54'/%3E%3Cline x1='32' y1='34' x2='44' y2='54'/%3E%3Cline x1='20' y1='34' x2='20' y2='46'/%3E%3Cline x1='44' y1='34' x2='44' y2='46'/%3E%3C/g%3E%3Ccircle cx='32' cy='7.5' r='3.4' fill='%23fff'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://miaoda.feishu.cn">
+<link rel="stylesheet" href="https://miaoda.feishu.cn/fonts/css2?family=Noto+Sans+SC:wght@400;500;700;900&display=swap">
+<style>
+:root{
+  --bg:#F2F6F8;
+  --surface:#FFFFFF;
+  --surface-2:#EAF1F3;
+  --ink:#17343D;
+  --muted:#5E7680;
+  --line:#DCE6EA;
+  --brand:#0E8A8A;
+  --brand-deep:#0A6B6B;
+  --brand-soft:#E2F2F2;
+  --good:#1FA96A;
+  --good-soft:#E4F6EC;
+  --warn:#E09A2B;
+  --warn-soft:#FBF1DC;
+  --bad:#DC5B4C;
+  --bad-soft:#FBE9E6;
+  --lost:#8FA3AB;
+  --radius:18px;
+  --shadow:0 2px 10px rgba(23,52,61,.06), 0 10px 30px rgba(23,52,61,.05);
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{-webkit-text-size-adjust:100%;overflow-anchor:none;scroll-padding-top:150px}
+@media (hover:none){.topbar{position:static}}
+body{
+  font-family:"Noto Sans SC","PingFang SC","Hiragino Sans GB","Microsoft YaHei",system-ui,sans-serif;
+  background:
+    radial-gradient(1100px 480px at 85% -10%, #E0F0F1 0%, rgba(224,240,241,0) 60%),
+    radial-gradient(900px 420px at -10% 20%, #EAF3F0 0%, rgba(234,243,240,0) 55%),
+    var(--bg);
+  color:var(--ink);
+  min-height:100vh;
+  line-height:1.55;
+}
+button{font-family:inherit;cursor:pointer;border:none;background:none;color:inherit;-webkit-tap-highlight-color:transparent;touch-action:manipulation}
+/* ===== 顶部栏 ===== */
+.topbar{
+  display:flex;align-items:center;justify-content:space-between;gap:16px;
+  padding:14px 26px;background:rgba(255,255,255,.86);backdrop-filter:blur(8px);
+  border-bottom:1px solid var(--line);position:sticky;top:0;z-index:30;flex-wrap:wrap;
+}
+.brand{display:flex;align-items:center;gap:11px;min-width:0}
+.brand svg{flex:none}
+.brand-name{font-weight:900;font-size:19px;letter-spacing:.5px;white-space:nowrap}
+.brand-name em{font-style:normal;color:var(--brand)}
+.brand-sub{font-size:12px;color:var(--muted);white-space:nowrap}
+.topbar-right{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.badge{display:inline-flex;align-items:center;gap:7px;font-size:12.5px;font-weight:700;padding:6px 12px;border-radius:999px;transition:background .25s,color .25s}
+.badge .dot{width:8px;height:8px;border-radius:50%;background:currentColor;box-shadow:0 0 0 0 rgba(0,0,0,.15)}
+.badge.idle{background:var(--lost);color:#fff}
+.badge.ready{background:var(--good-soft);color:var(--good)}
+.badge.fail{background:var(--bad-soft);color:var(--bad)}
+.icon-btn{display:inline-flex;align-items:center;gap:7px;font-size:13px;font-weight:700;padding:7px 13px;border-radius:999px;border:1px solid var(--line);background:#fff;transition:all .2s}
+.icon-btn:hover{border-color:var(--brand);color:var(--brand)}
+.icon-btn.active{background:var(--brand-soft);border-color:var(--brand);color:var(--brand-deep)}
+.timer-chip{font-variant-numeric:tabular-nums;font-weight:900;font-size:15px;color:var(--brand-deep);background:var(--brand-soft);padding:7px 14px;border-radius:999px;min-width:88px;text-align:center}
+.side-pick{display:inline-flex;background:var(--surface-2);border-radius:999px;padding:3px;gap:2px}
+.side-pick button{font-size:12.5px;font-weight:700;padding:6px 13px;border-radius:999px;color:var(--muted);transition:all .2s;white-space:nowrap}
+.side-pick button:hover{color:var(--brand-deep)}
+.side-pick button.active{background:#fff;color:var(--brand-deep);box-shadow:0 1px 4px rgba(23,52,61,.14)}
+/* ===== 主布局 ===== */
+.layout{
+  max-width:1240px;margin:22px auto 10px;padding:0 22px;
+  display:grid;grid-template-columns:minmax(0,1fr) 350px;gap:20px;align-items:start;
+}
+/* ===== 摄像头区 ===== */
+.cam-card{
+  position:relative;background:var(--surface);border-radius:var(--radius);overflow:hidden;
+  box-shadow:var(--shadow);border:1px solid var(--line);aspect-ratio:4/3;
+}
+#video,#overlay{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+#video{transform:scaleX(-1)}
+#overlay{display:none}
+.cam-placeholder{
+  position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;
+  background:linear-gradient(160deg,#F7FBFC 0%,#E7F1F2 100%);text-align:center;padding:24px;
+}
+.cam-placeholder svg{width:150px;height:150px;opacity:.9}
+.cam-placeholder h2{font-size:21px;font-weight:900}
+.cam-placeholder p{color:var(--muted);font-size:14px;max-width:420px}
+.primary-btn{
+  display:inline-flex;align-items:center;gap:9px;font-size:16px;font-weight:900;color:#fff;
+  background:linear-gradient(135deg,var(--brand) 0%,var(--brand-deep) 100%);
+  padding:13px 30px;border-radius:999px;box-shadow:0 8px 20px rgba(14,138,138,.28);transition:transform .15s,box-shadow .2s;
+}
+.primary-btn{cursor:pointer;touch-action:manipulation;-webkit-tap-highlight-color:transparent;position:relative;z-index:1000;text-decoration:none;-webkit-user-select:none;user-select:none}
+.primary-btn:hover{transform:translateY(-1px);box-shadow:0 12px 26px rgba(14,138,138,.34)}
+.primary-btn:disabled{opacity:.55;cursor:not-allowed;transform:none}
+.frame-warn{
+  position:absolute;top:12px;left:12px;right:12px;z-index:5;display:none;align-items:center;gap:10px;
+  background:var(--warn-soft);color:#8A5A10;border:1px solid rgba(224,154,43,.45);border-radius:12px;
+  padding:10px 14px;font-size:13px;font-weight:700;line-height:1.5;
+}
+.frame-warn button{
+  flex:none;background:var(--warn);color:#fff;font-size:12.5px;font-weight:900;padding:7px 14px;
+  border-radius:999px;white-space:nowrap;transition:background .2s;
+}
+.frame-warn button:hover{background:#c8861f}
+.frame-warn svg{flex:none}
+.cam-error{
+  position:absolute;left:16px;right:16px;top:16px;z-index:7;display:none;
+  background:#FBE9E6;color:#9C3B2E;border:1px solid rgba(220,91,76,.55);border-radius:12px;
+  padding:12px 14px;font-size:13.5px;font-weight:700;line-height:1.65;gap:10px;align-items:flex-start;
+  box-shadow:0 6px 20px rgba(156,59,46,.18);
+}
+.cam-error b{display:block;font-size:14.5px;margin-bottom:2px}
+.cam-error ol{margin:4px 0 0 18px;padding:0}
+.cam-error .err-close{
+  flex:none;margin-left:auto;width:24px;height:24px;border-radius:50%;background:rgba(156,59,46,.12);
+  color:#9C3B2E;font-size:14px;font-weight:900;display:flex;align-items:center;justify-content:center;
+}
+.cam-error .err-close:hover{background:rgba(156,59,46,.2)}
+.cam-statusbar{
+  position:absolute;left:0;right:0;bottom:0;display:flex;align-items:center;justify-content:space-between;gap:12px;
+  padding:12px 16px;background:linear-gradient(transparent,rgba(10,30,36,.72));color:#fff;min-height:64px;
+}
+.cam-statusbar .status-main{display:flex;align-items:center;gap:10px;min-width:0}
+.status-tag{font-size:12px;font-weight:900;padding:4px 10px;border-radius:999px;flex:none}
+.status-tag.good{background:var(--good)}
+.status-tag.warn{background:var(--warn)}
+.status-tag.bad{background:var(--bad)}
+.status-tag.lost{background:rgba(255,255,255,.22)}
+.status-text{font-size:15.5px;font-weight:700;text-shadow:0 1px 3px rgba(0,0,0,.35);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.score-block{display:flex;align-items:center;gap:9px;flex:none}
+.score-num{font-size:15px;font-weight:900;font-variant-numeric:tabular-nums}
+.score-ring{transform:rotate(-90deg)}
+.score-ring .ring-bg{stroke:rgba(255,255,255,.25)}
+.score-ring .ring-fg{stroke:var(--good);stroke-linecap:round;transition:stroke-dashoffset .3s ease,stroke .3s}
+.angle-strip{
+  margin-top:14px;background:var(--surface);border:1px solid var(--line);border-radius:14px;
+  padding:12px 16px;box-shadow:var(--shadow);display:flex;align-items:center;gap:14px;flex-wrap:wrap;
+}
+.angle-item{display:flex;align-items:baseline;gap:7px;font-size:13px;color:var(--muted);font-weight:700}
+.angle-item b{font-size:19px;color:var(--ink);font-variant-numeric:tabular-nums;font-weight:900}
+.angle-item .unit{font-size:12px}
+.angle-bar{flex:1;min-width:160px;height:8px;border-radius:99px;background:var(--surface-2);position:relative}
+.angle-bar .fill{position:absolute;left:0;top:0;bottom:0;border-radius:99px;background:var(--brand);transition:width .2s,background .2s}
+.angle-bar .target{position:absolute;top:-3px;bottom:-3px;width:3px;background:var(--ink);border-radius:3px;opacity:.5}
+.cam-note-bar{margin-top:10px;display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;padding:10px 14px;background:rgba(255,255,255,.78);border:1px solid var(--line);border-radius:12px;color:var(--muted);font-size:11.5px;font-weight:700}
+.cam-note-bar b{color:var(--ink)}
+/* ===== 右侧面板 ===== */
+.panel{display:flex;flex-direction:column;gap:14px}
+.panel-card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);padding:18px}
+.panel-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:12px}
+.panel-title{font-size:13px;font-weight:900;letter-spacing:2px;color:var(--muted)}
+.exercise-head{display:flex;align-items:center;gap:12px}
+.exercise-ico{width:46px;height:46px;border-radius:14px;background:var(--brand-soft);display:flex;align-items:center;justify-content:center;flex:none}
+.exercise-ico svg{width:30px;height:30px}
+.exercise-name{font-size:19px;font-weight:900;line-height:1.2}
+.exercise-cat{font-size:12px;font-weight:700;color:var(--brand-deep);background:var(--brand-soft);padding:2px 9px;border-radius:99px;display:inline-block;margin-top:3px}
+.demo-wrap{width:100%;height:112px;margin:6px 0 4px;background:var(--surface-2);border-radius:12px;display:flex;align-items:center;justify-content:center;overflow:hidden}
+#demoSvg{width:150px;height:100px}
+.goal-line{font-size:14px;color:var(--muted);margin-top:6px}
+.goal-line b{color:var(--ink)}
+.steps{margin-top:10px;display:flex;flex-direction:column;gap:6px}
+.step{display:flex;gap:9px;font-size:14px;color:var(--muted);align-items:flex-start}
+.step i{flex:none;width:18px;height:18px;border-radius:50%;background:var(--surface-2);color:var(--brand-deep);font-style:normal;font-weight:900;font-size:11px;display:flex;align-items:center;justify-content:center;margin-top:1px}
+/* 反馈区 */
+.feedback-card{position:relative;overflow:hidden}
+.feedback-state{font-size:30px;font-weight:900;line-height:1.25;margin-bottom:4px;transition:color .25s}
+.feedback-msg{font-size:14.5px;color:var(--muted);min-height:44px}
+.feedback-card::before{content:"";position:absolute;left:0;top:0;bottom:0;width:5px;background:var(--lost);transition:background .25s}
+.feedback-card.good::before{background:var(--good)}
+.feedback-card.warn::before{background:var(--warn)}
+.feedback-card.bad::before{background:var(--bad)}
+.feedback-card.lost::before{background:var(--lost)}
+/* 统计 */
+.stats-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.stat{background:var(--surface-2);border-radius:12px;padding:10px 8px;text-align:center}
+.stat b{display:block;font-size:22px;font-weight:900;font-variant-numeric:tabular-nums;line-height:1.2}
+.stat span{font-size:11.5px;color:var(--muted);font-weight:700}
+.stat.hl{background:var(--brand-soft);color:var(--brand-deep)}
+.rest-hint{display:none;margin-top:10px;text-align:center;font-weight:900;color:var(--brand-deep);background:var(--brand-soft);border-radius:10px;padding:8px;font-size:14px}
+.rest-hint.show{display:block}
+/* 控制 */
+.control-row{display:flex;gap:10px;margin-top:12px}
+.ctrl-btn{flex:1;font-size:14.5px;font-weight:900;padding:11px 10px;border-radius:12px;border:1px solid var(--line);background:#fff;transition:all .2s;display:inline-flex;align-items:center;justify-content:center;gap:7px}
+.ctrl-btn:hover{border-color:var(--brand);color:var(--brand)}
+.ctrl-btn.primary{background:var(--brand);border-color:var(--brand);color:#fff}
+.ctrl-btn.primary:hover{background:var(--brand-deep)}
+.ctrl-btn:disabled{opacity:.45;cursor:not-allowed}
+/* ===== 动作坞 ===== */
+.exercise-dock{max-width:1240px;margin:20px auto 14px;padding:0 22px}
+.dock-title{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+.dock-title h3{font-size:16px;font-weight:900}
+.dock-title span{font-size:12.5px;color:var(--muted);font-weight:700}
+.dock-scroll{display:grid;grid-template-columns:repeat(6,1fr);gap:12px}
+.ex-card{
+  background:var(--surface);border:2px solid var(--line);border-radius:16px;padding:14px 12px;text-align:left;
+  transition:all .2s;position:relative;overflow:hidden;
+}
+.ex-card:hover{border-color:var(--brand);transform:translateY(-2px);box-shadow:var(--shadow)}
+.ex-card.active{border-color:var(--brand);background:var(--brand-soft)}
+.ex-card .ex-ico{width:40px;height:40px;border-radius:11px;background:var(--surface-2);display:flex;align-items:center;justify-content:center;margin-bottom:9px}
+.ex-card.active .ex-ico{background:#fff}
+.ex-card .ex-ico svg{width:26px;height:26px}
+.ex-card .ex-name{font-size:14.5px;font-weight:900;line-height:1.25;margin-bottom:3px}
+.ex-card .ex-cat{font-size:11px;color:var(--muted);font-weight:700}
+.ex-card .ex-check{position:absolute;top:10px;right:10px;width:22px;height:22px;border-radius:50%;background:var(--good);color:#fff;display:none;align-items:center;justify-content:center;font-size:13px;font-weight:900}
+.ex-card.active .ex-check{display:flex}
+/* ===== 页脚 ===== */
+footer{max-width:1240px;margin:8px auto 30px;padding:0 22px}
+.disclaimer{font-size:12px;color:var(--muted);background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:11px 14px;line-height:1.7}
+.disclaimer b{color:var(--warn)}
+/* toast */
+/* ===== 个体化校准与动作质量评分 ===== */
+.quality-phase{font-size:11px;font-weight:900;padding:4px 8px;border-radius:999px;background:var(--surface-2);color:var(--muted)}
+.quality-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:7px;margin-top:10px}
+.quality-grid div{background:var(--surface-2);border-radius:10px;padding:7px 4px;text-align:center}
+.quality-grid b{display:block;font-size:16px;font-weight:900;color:var(--brand-deep);font-variant-numeric:tabular-nums}
+.quality-grid span{display:block;font-size:10px;color:var(--muted);font-weight:700;margin-top:2px}
+@media(max-width:560px){.quality-grid{grid-template-columns:repeat(2,1fr)}}
+.calibration-note{font-size:12px;color:var(--muted);background:var(--brand-soft);border:1px solid rgba(14,138,138,.18);padding:8px 10px;border-radius:10px;margin-top:8px;line-height:1.5}
+
+#toast{
+  position:fixed;left:50%;bottom:34px;transform:translateX(-50%) translateY(20px);z-index:60;
+  background:var(--ink);color:#fff;font-size:14px;font-weight:700;padding:11px 20px;border-radius:999px;
+  opacity:0;pointer-events:none;transition:all .3s;box-shadow:0 10px 30px rgba(0,0,0,.25);max-width:86vw;text-align:center;
+}
+#toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+/* 加载遮罩 */
+#loader{
+  position:fixed;inset:0;background:rgba(255,255,255,.92);z-index:80;display:none;
+  flex-direction:column;align-items:center;justify-content:center;gap:16px;text-align:center;padding:24px;
+}
+#loader.show{display:flex}
+.spinner{width:46px;height:46px;border-radius:50%;border:4px solid var(--brand-soft);border-top-color:var(--brand);animation:spin .8s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+#loader .load-text{font-size:15px;font-weight:900}
+#loader .load-sub{font-size:13px;color:var(--muted);max-width:420px;line-height:1.6}
+
+/* ===== 界面紧凑优化 ===== */
+.cam-card{aspect-ratio:16/10}
+.quick-tips{display:flex;justify-content:center;gap:10px;flex-wrap:wrap;margin-top:8px;font-size:11px;color:var(--muted);font-weight:700}
+.quick-tips span{background:rgba(255,255,255,.72);border:1px solid var(--line);border-radius:999px;padding:5px 9px}
+.panel{gap:10px}
+.panel-card{padding:15px}
+.demo-wrap{height:92px;margin:5px 0 3px}
+#demoSvg{height:82px}
+.steps{margin-top:7px;gap:4px}
+.step{font-size:12.5px;line-height:1.35}
+.step i{width:17px;height:17px;font-size:10px}
+.feedback-state{font-size:26px}
+.feedback-msg{min-height:34px;font-size:13.5px}
+.stats-grid{gap:7px}
+.stat{padding:8px 6px}
+.stat b{font-size:20px}
+.ctrl-btn{padding:9px 7px;font-size:13px}
+.build-label{max-width:1240px;margin:-8px auto 14px;padding:0 22px;text-align:right;font-size:10px;color:#A5B4BA;font-weight:700}
+.discipline-panel{max-width:1240px;margin:0 auto 18px;padding:15px 22px;background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow)}
+.discipline-top{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:11px}
+.discipline-sub{font-size:12px;color:var(--muted);margin-top:3px}
+.compact-goal{margin-top:0}
+.discipline-panel .discipline-grid{grid-template-columns:repeat(3,1fr);gap:10px}
+.discipline-panel .discipline-item{padding:9px 8px}
+.discipline-panel .history-box{margin-top:10px}
+.discipline-panel .history-list{grid-template-columns:repeat(5,1fr)}
+.discipline-panel .history-row{min-height:42px}
+@media(max-width:860px){
+  .cam-card{aspect-ratio:16/10}
+  .discipline-panel{margin-left:14px;margin-right:14px;padding:14px}
+}
+@media(max-width:700px){
+  .build-label{padding:0 14px}
+  .discipline-top{align-items:flex-start;flex-direction:column}
+  .compact-goal{width:100%;justify-content:space-between}
+  .discipline-panel .history-list{grid-template-columns:1fr}
+}
+
+/* 响应式 */
+@media (max-width:1020px){
+  .dock-scroll{grid-template-columns:repeat(3,1fr)}
+}
+@media (max-width:860px){
+  .layout{grid-template-columns:1fr;padding:0 14px}
+  .topbar{padding:12px 14px}
+  .brand-sub{display:none}
+  .exercise-dock{padding:0 14px}
+  footer{padding:0 14px}
+  .feedback-state{font-size:24px}
+  .cam-statusbar{flex-wrap:wrap}
+}
+@media (max-width:560px){
+  .dock-scroll{grid-template-columns:repeat(2,1fr)}
+  .stats-grid{grid-template-columns:repeat(3,1fr)}
+  .angle-strip{flex-direction:column;align-items:stretch}
+  .angle-bar{min-width:0}
+  .cam-placeholder svg{width:110px;height:110px}
+  .cam-placeholder h2{font-size:18px}
+}
+
+
+/* ===== 连续训练与时间记录 ===== */
+.training-discipline{margin-top:14px}
+.discipline-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:9px}
+.discipline-item{background:var(--surface-2);border:1px solid var(--line);border-radius:13px;padding:10px 8px;text-align:center}
+.discipline-item b{display:block;font-size:20px;line-height:1.15;color:var(--brand-deep);font-variant-numeric:tabular-nums}
+.discipline-item span{display:block;font-size:11px;color:var(--muted);margin-top:4px;font-weight:700}
+.goal-row{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:13px}
+.goal-label{font-size:12px;font-weight:800;color:var(--ink)}
+.goal-select{font-family:inherit;font-size:12px;font-weight:800;color:var(--brand-deep);background:#fff;border:1px solid var(--line);border-radius:9px;padding:6px 8px}
+.goal-track{height:8px;background:var(--surface-2);border-radius:99px;overflow:hidden;margin-top:8px}
+.goal-fill{height:100%;width:0%;background:linear-gradient(90deg,var(--brand),var(--good));border-radius:99px;transition:width .4s ease}
+.goal-caption{display:flex;justify-content:space-between;gap:8px;margin-top:5px;font-size:11px;color:var(--muted)}
+.history-box{margin-top:12px;border-top:1px solid var(--line);padding-top:11px}
+.history-title{font-size:12px;font-weight:900;margin-bottom:7px}
+.history-list{display:grid;gap:6px}
+.history-row{display:flex;justify-content:space-between;gap:8px;align-items:center;font-size:11px;color:var(--muted);padding:7px 8px;background:#FAFCFD;border-radius:9px}
+.history-row b{color:var(--ink);font-size:11.5px}
+.control-row{flex-wrap:wrap}
+.ctrl-btn.end-btn{color:var(--bad);border-color:rgba(220,91,76,.25)}
+.ctrl-btn.end-btn:hover{border-color:var(--bad);background:var(--bad-soft)}
+@media(max-width:700px){
+  .discipline-grid{gap:6px}
+  .discipline-item{padding:9px 5px}
+  .discipline-item b{font-size:18px}
+}
+
+/* ===== V7 Research-grade responsive layer ===== */
+html{scroll-behavior:smooth}
+body{overflow-x:hidden}
+button,input,select{font:inherit}
+button:focus-visible,select:focus-visible,a:focus-visible{outline:3px solid rgba(14,138,138,.32);outline-offset:2px}
+.topbar{padding-top:max(12px,env(safe-area-inset-top));padding-left:max(14px,env(safe-area-inset-left));padding-right:max(14px,env(safe-area-inset-right))}
+.layout{width:min(1240px,100%);}
+#video,#overlay{contain:layout paint}
+.cam-card{min-height:280px}
+.panel-card{min-width:0}
+.exercise-dock{margin-left:auto;margin-right:auto;width:min(1240px,100%);}
+.dock-scroll{scrollbar-width:thin;overscroll-behavior-x:contain}
+#reportModal,#testModal{position:fixed;inset:0;z-index:120;background:rgba(8,31,37,.58);display:none;align-items:center;justify-content:center;padding:18px;backdrop-filter:blur(5px)}
+.modal-card{width:min(720px,100%);max-height:min(88vh,760px);overflow:auto;background:var(--surface);border:1px solid var(--line);border-radius:22px;box-shadow:0 24px 70px rgba(0,0,0,.24);padding:22px}
+.modal-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:16px}
+.modal-head h2{font-size:20px;font-weight:900}
+.modal-close{width:38px;height:38px;border:1px solid var(--line);border-radius:50%;background:var(--surface-2);font-size:20px;font-weight:900}
+.report-grid,.test-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
+.report-stat,.test-row{background:var(--surface-2);border-radius:12px;padding:11px}
+.report-stat b{display:block;font-size:21px;font-variant-numeric:tabular-nums;color:var(--brand-deep)}
+.report-stat span{display:block;font-size:11px;color:var(--muted);font-weight:700;margin-top:2px}
+.test-row{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:8px;font-size:13px;font-weight:700}
+.test-pass{color:var(--good)} .test-fail{color:var(--bad)}
+.dev-note{margin-top:14px;padding:11px 13px;border-radius:12px;background:var(--brand-soft);color:var(--muted);font-size:12px;line-height:1.6}
+.v7-meta{display:flex;gap:7px;flex-wrap:wrap;margin-top:12px}
+.v7-chip{font-size:11px;font-weight:800;padding:5px 9px;border-radius:999px;background:var(--surface-2);color:var(--muted)}
+@media (max-width:1100px){
+  .layout{grid-template-columns:minmax(0,1fr) 320px;gap:14px;padding:0 14px}
+  .topbar{gap:10px}
+  .brand-sub{display:none}
+}
+@media (max-width:900px){
+  .layout{grid-template-columns:1fr;max-width:820px}
+  .panel{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));align-items:start}
+  .panel-card:first-child,.panel-card.feedback-card{grid-column:span 2}
+  .cam-card{aspect-ratio:16/10;min-height:300px}
+}
+@media (max-width:680px){
+  .topbar{position:sticky;flex-wrap:wrap;padding-bottom:10px}
+  .brand-name{font-size:17px}
+  .topbar-right{width:100%;justify-content:flex-end;gap:7px}
+  .layout{margin-top:10px;padding:0 10px}
+  .panel{display:flex}
+  .panel-card:first-child,.panel-card.feedback-card{grid-column:auto}
+  .cam-card{aspect-ratio:4/3;min-height:260px;border-radius:14px}
+  .cam-placeholder{padding:18px}.cam-placeholder svg{width:100px;height:100px}.cam-placeholder h2{font-size:18px}.cam-placeholder p{font-size:12.5px}
+  .primary-btn{width:100%;justify-content:center;padding:12px 18px;font-size:15px}
+  .cam-statusbar{padding:9px 11px;min-height:58px}.status-text{font-size:12.5px}.score-ring{width:42px;height:42px}
+  .angle-strip{padding:10px 12px;gap:10px}.angle-bar{min-width:120px}
+  .panel-card{padding:14px;border-radius:14px}
+  .exercise-name{font-size:17px}
+  .exercise-ico{width:40px;height:40px}
+  .report-grid,.test-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .modal-card{padding:16px;border-radius:16px}
+  .side-pick button{padding:6px 9px}
+  .icon-btn{padding:7px 9px;font-size:12px}
+  .timer-chip{min-width:72px;padding:6px 9px;font-size:13px}
+}
+@media (max-width:420px){
+  .topbar-right{justify-content:stretch}.topbar-right>*{flex:1}.topbar-right select{min-width:0}
+  .cam-card{min-height:235px}
+  .quality-grid{gap:5px}.quality-grid div{padding:6px 3px}
+  .angle-item b{font-size:17px}
+  .quick-tips{gap:5px}
+}
+@media (orientation:landscape) and (max-height:560px) and (max-width:900px){
+  .topbar{position:static}.layout{grid-template-columns:minmax(0,1.35fr) minmax(280px,.8fr)}
+  .panel{display:flex}.cam-card{aspect-ratio:16/9;min-height:230px}
+}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.001ms!important;animation-iteration-count:1!important;scroll-behavior:auto!important;transition-duration:.001ms!important}}
+
+
+/* V8 accessibility / touch refinements */
+button,select{min-height:44px}
+button:focus-visible,select:focus-visible{outline:3px solid rgba(14,138,138,.35);outline-offset:2px}
+#feedbackMsg,#statusText,#qualityPhase{aria-live:polite}
+</style>
+
+</head>
+<body>
+
+<!-- ===== 顶部栏 ===== -->
+<header class="topbar">
+  <div class="brand">
+    <svg width="40" height="40" viewBox="0 0 64 64" aria-hidden="true">
+      <rect width="64" height="64" rx="15" fill="#0E8A8A"/>
+      <g stroke="#fff" stroke-width="3.6" stroke-linecap="round">
+        <line x1="32" y1="10" x2="32" y2="22"/>
+        <line x1="32" y1="22" x2="20" y2="34"/>
+        <line x1="32" y1="22" x2="44" y2="34"/>
+        <line x1="32" y1="34" x2="20" y2="54"/>
+        <line x1="32" y1="34" x2="44" y2="54"/>
+        <line x1="20" y1="34" x2="20" y2="46"/>
+        <line x1="44" y1="34" x2="44" y2="46"/>
+      </g>
+      <circle cx="32" cy="7.5" r="3.6" fill="#fff"/>
+    </svg>
+    <div>
+      <div class="brand-name">卒中<em>复康助手</em></div>
+      <div class="brand-sub">脑卒中居家康复 · AI 动作实时指导</div>
+    </div>
+  </div>
+  <div class="topbar-right">
+    <div class="side-pick" role="group" aria-label="选择患侧">
+      <button type="button" data-side="L" class="active">左侧偏瘫</button>
+      <button type="button" data-side="R">右侧偏瘫</button>
+      <button type="button" data-side="B">双侧训练</button>
+    </div>
+    <span id="camBadge" class="badge idle"><span class="dot"></span><span id="camBadgeText">摄像头未开启</span></span>
+    <button id="voiceToggle" class="icon-btn active" type="button" aria-pressed="true">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5 6 9H2v6h4l5 4V5z"/><path d="M15.5 8.5a5 5 0 0 1 0 7"/><path d="M18.5 5.5a9 9 0 0 1 0 13"/></svg>
+      <span id="voiceLabel">语音提示 开</span>
+    </button>
+    <span class="timer-chip" id="timerChip">00:00</span>
+  </div>
+</header>
+
+<!-- ===== 主区域 ===== -->
+<main class="layout">
+
+  <!-- 左：摄像头 -->
+  <section class="cam-col">
+    <div class="cam-card">
+      <div class="frame-warn" id="frameWarn">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg>
+        <span>当前为预览模式，无法调用摄像头。请在新标签页中打开后使用动作识别功能。</span>
+        <button type="button" id="openNewTab">在新标签页打开</button>
+      </div>
+      <div class="cam-error" id="camError">
+        <div id="camErrorText"></div>
+        <button type="button" class="err-close" id="camErrorClose" aria-label="关闭提示">×</button>
+      </div>
+      <div class="cam-placeholder" id="camPlaceholder">
+        <svg viewBox="0 0 200 200" aria-hidden="true">
+          <circle cx="100" cy="52" r="16" fill="#0E8A8A" opacity=".9"/>
+          <g stroke="#0E8A8A" stroke-width="7" stroke-linecap="round" opacity=".85">
+            <line x1="100" y1="70" x2="100" y2="120"/>
+            <line x1="100" y1="86" x2="62" y2="112"/>
+            <line x1="100" y1="86" x2="138" y2="112"/>
+            <line x1="100" y1="120" x2="70" y2="170"/>
+            <line x1="100" y1="120" x2="130" y2="170"/>
+          </g>
+          <g stroke="#0A6B6B" stroke-width="4" stroke-linecap="round" opacity=".6">
+            <line x1="62" y1="112" x2="52" y2="100"/>
+            <line x1="138" y1="112" x2="148" y2="100"/>
+          </g>
+          <path d="M70 42 q30 -14 60 0" fill="none" stroke="#0A6B6B" stroke-width="5" stroke-linecap="round" opacity=".55"/>
+        </svg>
+        <h2>让摄像头看见你的动作</h2>
+        <p>请坐于稳固椅子上或将全身（头到脚）置于画面中，保持光线充足。所有动作请缓慢进行，训练时建议家属在旁监护。</p>
+        <button id="startBtn" class="primary-btn" type="button" aria-label="开始训练">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+          开始训练
+        </button>
+        <p style="font-size:12px;color:#9AB0B8;margin-top:2px">首次使用需允许摄像头权限，识别过程不离开你的设备</p>
+        <div class="quick-tips">
+          <span>① 坐稳或站稳</span><span>② 全身入镜</span><span>③ 缓慢完成</span>
+        </div>
+      </div>
+      <video id="video" playsinline muted></video>
+      <canvas id="overlay"></canvas>
+      <div class="cam-statusbar" id="camStatusbar" style="display:none">
+        <div class="status-main">
+          <span class="status-tag lost" id="statusTag">等待</span>
+          <span class="status-text" id="statusText">正在连接摄像头…</span>
+        </div>
+        <div class="score-block">
+          <svg class="score-ring" width="40" height="40" viewBox="0 0 40 40">
+            <circle class="ring-bg" cx="20" cy="20" r="16.5" fill="none" stroke-width="4"/>
+            <circle class="ring-fg" id="ringFg" cx="20" cy="20" r="16.5" fill="none" stroke-width="4"
+              stroke-dasharray="103.7" stroke-dashoffset="103.7"/>
+          </svg>
+          <span class="score-num" id="scoreNum">0</span>
+        </div>
+      </div>
+    </div>
+    <div class="angle-strip" id="angleStrip" style="display:none">
+      <span class="angle-item" id="angleItemA"><span>角度</span><b id="angleValA">–</b><span class="unit">°</span></span>
+      <div class="angle-bar"><div class="fill" id="angleFill" style="width:0%"></div><div class="target" id="angleTarget"></div></div>
+      <span class="angle-item" id="angleItemB" style="display:none"><span>角度</span><b id="angleValB">–</b><span class="unit">°</span></span>
+    </div>
+    <div class="cam-note-bar">
+      <span><b>训练原则</b> 慢 · 稳 · 不疼痛</span>
+      <span>建议家属在旁陪同</span>
+      <span>结果仅供训练参考</span>
+    </div>
+  </section>
+
+  <!-- 右：面板 -->
+  <aside class="panel">
+    <div class="panel-card">
+      <div class="panel-head">
+        <span class="panel-title">当前动作</span>
+        <span class="exercise-cat" id="catLabel">上肢康复</span>
+      </div>
+      <div class="exercise-head">
+        <div class="exercise-ico" id="exIco"></div>
+        <div>
+          <div class="exercise-name" id="exName">手臂前平举</div>
+          <div style="font-size:12px;color:var(--muted);font-weight:700" id="exEn">FRONT RAISE</div>
+        </div>
+      </div>
+      <div class="demo-wrap">
+        <svg id="demoSvg" viewBox="0 0 160 110" aria-hidden="true"></svg>
+      </div>
+      <div class="goal-line" id="goalLine"></div>
+      <div class="steps" id="stepList"></div>
+    </div>
+
+    <div class="panel-card feedback-card lost" id="feedbackCard">
+      <div class="panel-head"><span class="panel-title">实时反馈</span><span class="quality-phase" id="qualityPhase">待机</span></div>
+      <div class="feedback-state" id="feedbackState">准备就绪</div>
+      <div class="feedback-msg" id="feedbackMsg">选择动作并开始训练后，这里会实时显示你的动作质量与纠正建议。</div>
+      <div class="quality-grid" id="qualityGrid" aria-label="动作质量评分">
+        <div><b id="qualityAngle">—</b><span>角度</span></div>
+        <div><b id="qualityStability">—</b><span>稳定性</span></div>
+        <div><b id="qualitySpeed">—</b><span>速度</span></div>
+        <div><b id="qualityComp">—</b><span>代偿</span></div>
+      </div>
+    </div>
+
+    <div class="panel-card">
+      <div class="panel-head"><span class="panel-title">训练统计</span></div>
+      <div class="stats-grid">
+        <div class="stat"><b id="statCount">0</b><span>完成次数</span></div>
+        <div class="stat hl"><b id="statTime">00:00</b><span>训练时长</span></div>
+        <div class="stat"><b id="statHold">0.0s</b><span>达标保持</span></div>
+      </div>
+      <div class="rest-hint" id="restHint">休息中 · <b id="restNum">3</b> 秒后继续</div>
+
+
+      <div class="control-row">
+        <button class="ctrl-btn" id="calibrateBtn" type="button" disabled>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M4 12a8 8 0 0 1 16 0"/><path d="M20 12a8 8 0 0 1-16 0"/><path d="M12 4v4M12 16v4"/></svg>
+          个体化校准
+        </button>
+        <button class="ctrl-btn" id="pauseBtn" type="button" disabled>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M6 5h4v14H6zM14 5h4v14h-4z"/></svg>
+          暂停
+        </button>
+        <button class="ctrl-btn" id="resetBtn" type="button">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v5h5"/></svg>
+          重置统计
+        </button>
+        <button class="ctrl-btn end-btn" id="endBtn" type="button" disabled>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"/></svg>
+          结束训练
+        </button>
+      </div>
+    </div>
+  </aside>
+</main>
+<section class="discipline-panel">
+  <div class="discipline-top">
+    <div>
+      <div class="panel-title">连续训练与时间记录</div>
+      <div class="discipline-sub">记录每次训练，帮助患者和家属了解训练坚持情况</div>
+    </div>
+    <div class="goal-row compact-goal">
+      <span class="goal-label">本次目标时长</span>
+      <select id="goalSelect" class="goal-select" aria-label="本次目标训练时长">
+        <option value="5">5 分钟</option>
+        <option value="10" selected>10 分钟</option>
+        <option value="15">15 分钟</option>
+        <option value="20">20 分钟</option>
+      </select>
+    </div>
+  </div>
+  <div class="discipline-grid">
+    <div class="discipline-item"><b id="streakDays">0</b><span>连续训练（天）</span></div>
+    <div class="discipline-item"><b id="todayMinutes">0</b><span>今日训练（分钟）</span></div>
+    <div class="discipline-item"><b id="weekMinutes">0</b><span>本周训练（分钟）</span></div>
+  </div>
+  <div class="goal-track" aria-label="本次目标完成度"><div class="goal-fill" id="goalFill"></div></div>
+  <div class="goal-caption"><span id="goalElapsed">本次 00:00</span><span id="goalRemain">目标 10:00</span></div>
+  <div class="history-box">
+    <div class="history-title">最近训练</div>
+    <button class="ctrl-btn" id="exportBtn" type="button" style="margin:8px 0">导出训练记录（CSV）</button>
+    <div class="history-list" id="historyList"><div class="history-row"><span>还没有训练记录</span><b>—</b></div></div>
+  </div>
+</section>
+
+
+<!-- ===== 动作选择坞 ===== -->
+<section class="exercise-dock">
+  <div class="dock-title">
+    <h3>选择训练动作</h3>
+    <span>点击卡片切换 · 康复训练循序渐进，以医嘱为准</span>
+  </div>
+  <div class="dock-scroll" id="dockScroll"></div>
+</section>
+
+<footer>
+  <p class="disclaimer"><b>安全提示：</b>本工具用于辅助脑卒中患者居家康复训练，不构成医疗诊断或治疗方案。训练前请咨询医生或康复治疗师；训练时建议家属在旁监护；出现头晕、胸闷、心悸、患肢疼痛加重等不适请立即停止。识别基于通用人体姿态模型，结果仅供参考。</p>
+</footer>
+
+
+<div id="reportModal" role="dialog" aria-modal="true" aria-labelledby="reportTitle">
+  <div class="modal-card">
+    <div class="modal-head"><h2 id="reportTitle">本次训练报告</h2><button class="modal-close" id="reportClose" type="button" aria-label="关闭">×</button></div>
+    <div id="reportContent"></div>
+    <div class="dev-note">本报告用于记录本次网页训练过程中的算法输出，不属于临床量表，也不能替代医生或康复治疗师的评估。</div>
+  </div>
+</div>
+<div id="testModal" role="dialog" aria-modal="true" aria-labelledby="testTitle">
+  <div class="modal-card">
+    <div class="modal-head"><h2 id="testTitle">系统自检与开发测试</h2><button class="modal-close" id="testClose" type="button" aria-label="关闭">×</button></div>
+    <div id="testContent"></div>
+    <div class="dev-note">测试模式不会修改训练次数，也不会模拟真实患者数据。它用于功能、浏览器能力和算法边界的可重复自检。</div>
+  </div>
+</div>
+
+<div id="toast" role="status"></div>
+<div id="loader">
+  <div class="spinner"></div>
+  <div class="load-text" id="loadText">正在准备…</div>
+  <div class="load-sub" id="loadSub">首次加载需下载 AI 姿态识别模型（约 3MB），请耐心等待；若长时间无响应，请检查网络后刷新重试。</div>
+</div>
+
+<script>
+'use strict';
+
+/* ===== V7 系统配置与架构层 ===== */
+const CONFIG = Object.freeze({
+  appVersion:'8.0-paper-final',
+  pose:Object.freeze({minScore:0.42, holdFrames:6, emaAlpha:0.70, loopMs:66}),
+  training:Object.freeze({holdSeconds:2, maxHistory:120, minRecordSeconds:10}),
+  quality:Object.freeze({angle:0.50, stability:0.20, speed:0.15, compensation:0.15, historySize:45, sampleSize:300, minValidScore:0.55}),
+  camera:Object.freeze({width:1280,height:720, timeoutMs:8000, modelTimeoutMs:90000}),
+  browser:Object.freeze({supportedLanguages:['zh','en','ko'], minTouchPx:44}),
+  storage:Object.freeze({version:2, calibrationKey:'stroke_rehab_calibration_v2', historyKey:'stroke_rehab_training_history_v2', goalKey:'stroke_rehab_goal_minutes_v2'})
+});
+const APP_PHASE = Object.freeze({IDLE:'idle',CAMERA:'camera_ready',LOADING:'model_loading',READY:'ready',CALIBRATION:'calibration',TRAINING:'training',PAUSED:'paused',REPORT:'report',DEGRADED:'degraded',ERROR:'error'});
+const AppController = {
+  phase:APP_PHASE.IDLE,
+  history:[],
+  setPhase(next,reason){
+    const allowed={
+      idle:[APP_PHASE.CAMERA,APP_PHASE.ERROR],camera_ready:[APP_PHASE.LOADING,APP_PHASE.IDLE,APP_PHASE.ERROR],
+      model_loading:[APP_PHASE.READY,APP_PHASE.DEGRADED,APP_PHASE.ERROR],ready:[APP_PHASE.TRAINING,APP_PHASE.CALIBRATION,APP_PHASE.IDLE],
+      calibration:[APP_PHASE.TRAINING,APP_PHASE.IDLE,APP_PHASE.ERROR],training:[APP_PHASE.PAUSED,APP_PHASE.CALIBRATION,APP_PHASE.REPORT,APP_PHASE.IDLE,APP_PHASE.ERROR],
+      paused:[APP_PHASE.TRAINING,APP_PHASE.REPORT,APP_PHASE.IDLE],report:[APP_PHASE.IDLE,APP_PHASE.TRAINING],degraded:[APP_PHASE.IDLE,APP_PHASE.CAMERA,APP_PHASE.ERROR],error:[APP_PHASE.IDLE,APP_PHASE.CAMERA]
+    };
+    if(next!==this.phase && !(allowed[this.phase]||[]).includes(next)){ console.warn('Invalid phase transition',this.phase,'->',next,reason||''); return false; }
+    this.phase=next; return true;
+  },
+  reset(){this.phase=APP_PHASE.IDLE;this.history=[];}
+};
+window.RehabApp={version:CONFIG.appVersion,config:CONFIG,controller:AppController};
+
+/* ===== 全局状态 ===== */
+const State = {
+  detector:null, videoOn:false, running:false, paused:false,
+  exIndex:0, count:0, holdTime:0, sessionStart:0, timerId:null,
+  goodFrames:0, goodTime:0, lastT:0, lastDt:0.066, resting:false, restLeft:0, restTimerId:null,
+  voiceOn:true, lastSpoke:'', lastSpokeAt:0, neckSide:null,
+  holdReported:0, affectedSide:'L', sitPhase:'sit', sessionRecorded:false, goalAnnounced:false,
+  smoothKpts:{}, kptMissCount:{},
+  calibration:null, calibrationActive:false, calibrationStart:0, calibrationSamples:[],
+  metricHistory:[], phase:'idle', lastPrimaryMetric:null, lastMetricTime:0, qualitySamples:[], sessionQuality:[],
+  repPhase:'neutral', repHoldStart:0, repTargetReached:false, neckSequence:'neutral', neckHoldStart:0, lastRepAt:0, validQualityTime:0
+};
+
+/* ===== 关键点索引 (MoveNet) ===== */
+const KP = {
+  nose:'nose', lEye:'left_eye', rEye:'right_eye', lEar:'left_ear', rEar:'right_ear',
+  lShoulder:'left_shoulder', rShoulder:'right_shoulder',
+  lElbow:'left_elbow', rElbow:'right_elbow',
+  lWrist:'left_wrist', rWrist:'right_wrist',
+  lHip:'left_hip', rHip:'right_hip',
+  lKnee:'left_knee', rKnee:'right_knee',
+  lAnkle:'left_ankle', rAnkle:'right_ankle'
+};
+
+/* ===== 几何工具 ===== */
+function ang(a,b,c){ // 三点角度，b 为顶点
+  const v1={x:a.x-b.x,y:a.y-b.y}, v2={x:c.x-b.x,y:c.y-b.y};
+  const d=Math.sqrt(v1.x*v1.x+v1.y*v1.y)*Math.sqrt(v2.x*v2.x+v2.y*v2.y);
+  if(!d) return 180;
+  let cos=(v1.x*v2.x+v1.y*v2.y)/d;
+  cos=Math.max(-1,Math.min(1,cos));
+  return Math.acos(cos)*180/Math.PI;
+}
+function vecAngle(ax,ay,bx,by){
+  const d=Math.sqrt(ax*ax+ay*ay)*Math.sqrt(bx*bx+by*by);
+  if(!d) return 180;
+  let cos=(ax*bx+ay*by)/d; cos=Math.max(-1,Math.min(1,cos));
+  return Math.acos(cos)*180/Math.PI;
+}
+const HOLD_SEC=CONFIG.training.holdSeconds; // 保持达标时长（秒），与动作说明中的“停留 2 秒”一致
+function dist(a,b){ return Math.hypot(a.x-b.x,a.y-b.y); }
+function mid(a,b){ return {x:(a.x+b.x)/2,y:(a.y+b.y)/2}; }
+const KPT_MIN_SCORE=CONFIG.pose.minScore;     // 关键点最低可信度，低于此值不参与角度计算
+const KPT_HOLD_FRAMES=CONFIG.pose.holdFrames;      // 置信度短暂不足时，最多沿用上一帧位置的帧数（约 0.4 秒），避免瞬时遮挡导致“忽然丢失”
+const KPT_EMA_ALPHA=CONFIG.pose.emaAlpha;     // 关键点位置一阶指数平滑系数：越小越平滑但跟手性越差，0.5~0.6 较适合康复动作的慢速训练
+function ok(m,n){ const p=m[n]; return p && p.score>KPT_MIN_SCORE; }
+function visible(m,names){ return names.every(n=>ok(m,n)); }
+/* 关键点时序平滑：
+   1) 置信度足够时，与上一帧做指数平滑，压制模型输出的高频抖动（这是"动作检测不精准/角度乱跳"的主要来源之一）；
+   2) 置信度暂时不足（例如动作过程中一瞬间被自身肢体遮挡）时，短暂沿用上一帧位置，而不是立刻判定为"未检测到"；
+   3) 若持续多帧仍检测不到，才如实标记为低分，交给 visible() 判定为丢失，提示用户调整位置。 */
+function smoothPose(rawKpts){
+  const out=[];
+  for(const k of rawKpts){
+    const prev=State.smoothKpts[k.name];
+    if(k.score>KPT_MIN_SCORE){
+      State.kptMissCount[k.name]=0;
+      let x=k.x, y=k.y;
+      if(prev){ x=prev.x+(x-prev.x)*KPT_EMA_ALPHA; y=prev.y+(y-prev.y)*KPT_EMA_ALPHA; }
+      const sm={name:k.name,x,y,score:k.score,held:false};
+      State.smoothKpts[k.name]=sm;
+      out.push(sm);
+    }else if(prev && (State.kptMissCount[k.name]||0)<KPT_HOLD_FRAMES){
+      State.kptMissCount[k.name]=(State.kptMissCount[k.name]||0)+1;
+      out.push({name:k.name,x:prev.x,y:prev.y,score:KPT_MIN_SCORE+0.01,held:true});
+    }else{
+      State.kptMissCount[k.name]=(State.kptMissCount[k.name]||0)+1;
+      out.push(k);
+    }
+  }
+  return out;
+}
+function resetPoseSmoothing(){ State.smoothKpts={}; State.kptMissCount={}; }
+
+/* ===== 个体化校准与动作质量评价 ===== */
+const CALIBRATION_KEY=CONFIG.storage.calibrationKey; const LEGACY_CALIBRATION_KEY='stroke_rehab_calibration_v1';
+const QUALITY_WEIGHTS=CONFIG.quality;
+function loadCalibration(){
+  try{ const x=JSON.parse(localStorage.getItem(CALIBRATION_KEY)||''); if(x&&typeof x==='object') return x; const old=JSON.parse(localStorage.getItem(LEGACY_CALIBRATION_KEY)||'{}'); return old&&typeof old==='object'?old:{}; }catch(e){ return {}; }
+}
+function saveCalibration(x){ try{ localStorage.setItem(CALIBRATION_KEY,JSON.stringify(x)); }catch(e){} }
+function calibrationForExercise(){
+  const all=loadCalibration(); return all[EXERCISES[State.exIndex]?.id]||null;
+}
+function currentMetric(r){ return r&&r.a&&Number.isFinite(Number(r.a.val))?Number(r.a.val):null; }
+function beginCalibration(){
+  if(!State.videoOn||!State.detector||!State.running){ toast('请先点击“开始训练”，等待摄像头和 AI 模型就绪'); return; }
+  AppController.setPhase(APP_PHASE.CALIBRATION,'calibration-start'); State.calibrationActive=true; State.calibrationStart=performance.now(); State.calibrationSamples=[]; State.phase='calibration';
+  qualityPhase.textContent='校准中';
+  feedbackState.textContent='个体化校准'; feedbackState.style.color='var(--brand)';
+  feedbackMsg.textContent='请从舒适起始位缓慢完成一次当前动作，到达自己安全、舒适的活动范围后停留，再缓慢返回。不要为了分数强行加大幅度。';
+  say('开始个体化校准，请按自己的舒适范围缓慢完成一次动作',true);
+  calibrateBtn.disabled=true;
+}
+function finishCalibration(){
+  const vals=State.calibrationSamples.filter(Number.isFinite).sort((a,b)=>a-b);
+  State.calibrationActive=false;
+  if(vals.length<8){ State.phase='idle'; qualityPhase.textContent='待机'; calibrateBtn.disabled=false; toast('校准样本不足，请保持关键点稳定后再试'); return; }
+  const q=(p)=>vals[Math.min(vals.length-1,Math.max(0,Math.floor((vals.length-1)*p)))];
+  const mean=vals.reduce((a,b)=>a+b,0)/vals.length; const sd=Math.sqrt(vals.reduce((a,b)=>a+(b-mean)**2,0)/vals.length);
+  const variability=sd/Math.max(Math.abs(q(.90)-q(.10)),1);
+  const completeness=Math.min(1,vals.length/60);
+  const reliability=vals.length>=30 && variability<0.45?'high':(vals.length>=15&&variability<0.70?'medium':'low');
+  const rec={min:q(.10),max:q(.90),median:q(.50),samples:vals.length,sd:Number(sd.toFixed(2)),variability:Number(variability.toFixed(3)),completeness:Number(completeness.toFixed(2)),reliability,updatedAt:Date.now()};
+  const all=loadCalibration(); all[EXERCISES[State.exIndex].id]=rec; saveCalibration(all); State.calibration=rec;
+  State.phase='training'; AppController.setPhase(APP_PHASE.TRAINING,'calibration-finished'); qualityPhase.textContent='已校准'; calibrateBtn.disabled=false;
+  feedbackMsg.textContent=`已建立本动作的个人舒适范围 ${Math.round(rec.min)}–${Math.round(rec.max)}。正式评分仍保留通用动作安全边界，不把个人校准当作医学正常值。`;
+  say('个体化校准完成，接下来按个人舒适范围进行评价',true);
+}
+function adaptiveScore(r){
+  if(!r||!r.a||!Number.isFinite(Number(r.a.val))) return r;
+  const base=Number(r.score)||0, c=State.calibration||calibrationForExercise();
+  const out=Object.assign({},r,{originalScore:base,adapted:false});
+  if(!c||!Number.isFinite(c.min)||!Number.isFinite(c.max)) return out;
+  const v=Number(r.a.val), baseLow=Number(r.a.min), baseHigh=Number(r.a.max);
+  const span=Math.max(baseHigh-baseLow,1), personalSpan=Math.max(c.max-c.min,1);
+  const tolerance=Math.min(span*.22,Math.max(4,personalSpan*.15));
+  const nearLow=Math.max(baseLow-tolerance,c.min-tolerance*.25);
+  const nearHigh=Math.min(baseHigh+tolerance,c.max+tolerance*.25);
+  if(v>=baseLow&&v<=baseHigh) return out;
+  if(v>=nearLow&&v<=nearHigh && base<100){ out.score=Math.max(base,70); out.status='warn'; out.adapted=true; }
+  return out;
+}
+function updateQuality(r,m){
+  const now=performance.now(), v=currentMetric(r);
+  if(v!=null){
+    State.metricHistory.push({t:now,v});
+    if(State.metricHistory.length>45) State.metricHistory.shift();
+  }
+  const hist=State.metricHistory;
+  let stability=100,speed=100;
+  if(hist.length>=8){
+    const recent=hist.slice(-12).map(x=>x.v), mean=recent.reduce((a,b)=>a+b,0)/recent.length;
+    const sd=Math.sqrt(recent.reduce((a,b)=>a+(b-mean)**2,0)/recent.length);
+    const span=Math.max((r.a?.max||100)-(r.a?.min||0),20);
+    stability=Math.max(0,Math.min(100,100-(sd/span)*180));
+    const dt=(hist[hist.length-1].t-hist[Math.max(0,hist.length-8)].t)/1000;
+    const dv=Math.abs(hist[hist.length-1].v-hist[Math.max(0,hist.length-8)].v);
+    const rate=dt>0?dv/dt:0;
+    // 康复训练强调慢而可控：极端快慢都不视为高质量，但这里仅作为动作质量维度而非医学处方。
+    const ideal=Math.max(8,span*.55);
+    speed=Math.max(0,100-Math.abs(rate-ideal)/ideal*100);
+    speed=Math.max(40,Math.min(100,speed));
+  }
+  let comp=100;
+  if(r.compensation!=null) comp=Number(r.compensation);
+  if(m){
+    const ls=m[KP.lShoulder],rs=m[KP.rShoulder],lh=m[KP.lHip],rh=m[KP.rHip];
+    if(ls&&rs&&lh&&rh && State.exIndex!==4){
+      const shoulderMid=mid(ls,rs), hipMid=mid(lh,rh), torso=Math.max(dist(shoulderMid,hipMid),20);
+      const lean=Math.abs(shoulderMid.x-hipMid.x)/torso;
+      if(lean>.22) comp=Math.min(comp,Math.max(0,100-(lean-.22)*260));
+    }
+  }
+  const heldPenalty = (m && Object.values(m).some(k=>k&&k.held)) ? 0.90 : 1;
+  const angle=Math.max(0,Math.min(100,(Number(r.score)||0)*heldPenalty));
+  const total=angle*QUALITY_WEIGHTS.angle+stability*QUALITY_WEIGHTS.stability+speed*QUALITY_WEIGHTS.speed+comp*QUALITY_WEIGHTS.comp;
+  r.quality={total,angle,stability,speed,comp};
+  if(r.status!=='lost' && angle>=CONFIG.quality.minValidScore*100){ State.qualitySamples.push({t:now,total,angle,stability,speed,comp}); State.validQualityTime+=State.lastDt; }
+  if(State.qualitySamples.length>CONFIG.quality.sampleSize) State.qualitySamples.shift();
+  // 质量分仅用于训练反馈，不改变“是否达标”的计数条件。
+  qualityAngle.textContent=Math.round(angle); qualityStability.textContent=Math.round(stability);
+  qualitySpeed.textContent=Math.round(speed); qualityComp.textContent=Math.round(comp);
+  scoreNum.textContent=Math.round(total);
+  return r;
+}
+function updatePhase(r){
+  const v=currentMetric(r); if(v==null){ State.phase='lost'; qualityPhase.textContent='未检测'; return; }
+  const prev=State.lastPrimaryMetric; State.lastPrimaryMetric=v;
+  if(State.calibrationActive){ qualityPhase.textContent='校准中'; return; }
+  if(prev==null){ State.phase='prepare'; }
+  else {
+    const d=v-prev;
+    const target=(r.a.min+r.a.max)/2;
+    if(Math.abs(v-target)<Math.max(4,(r.a.max-r.a.min)*.12)) State.phase='target';
+    else if(Math.abs(d)<1.2) State.phase='hold';
+    else State.phase=d>0?'lift':'lower';
+  }
+  const labels={prepare:'准备',lift:'上举/抬起',target:'目标位',hold:'保持',lower:'回落',training:'训练',lost:'未检测',idle:'待机'};
+  qualityPhase.textContent=labels[State.phase]||'训练';
+}
+
+/* ===== 动作库（脑卒中康复版）===== */
+/* 每个动作:
+   evaluate(m)->{score,status,feedback,a:{val,min,max,label,unit}|null,b:...|null}
+   a 主指标 b 次指标；hold=true 时为保持计时类；repDone=true 表示完成一次（状态机动作）*/
+const EXERCISE_CONFIG=Object.freeze({
+  'bobath-raise':Object.freeze({target:[60,120],warning:[40,140],neutralMax:50,holdSec:2,completion:'target-hold-return'}),
+  'shoulder-flex':Object.freeze({target:[60,105],warning:[40,125],neutralMax:50,holdSec:2,completion:'target-hold-return'}),
+  'elbow-flex':Object.freeze({target:[75,105],warning:[55,125],neutralMin:125,holdSec:2,completion:'target-hold-return'}),
+  'leg-raise':Object.freeze({target:[115,175],warning:[90,180],neutralMax:105,holdSec:2,completion:'target-hold-return'}),
+  'sit-to-stand':Object.freeze({target:[35,70],neutralMax:12,holdSec:2,completion:'sit-stand-return'}),
+  'neck-lateral':Object.freeze({target:[22,60],warning:[15,60],neutralMax:15,holdSec:3,completion:'left-right-hold'})
+});
+function exerciseConfig(){ return EXERCISE_CONFIG[EXERCISES[State.exIndex]?.id]||{}; }
+
+const EXERCISES=[
+{
+  id:'bobath-raise', name:'Bobath 握手前上举', en:'BOBATH RAISE', cat:'上肢康复',
+  goal:'双手十指交叉，健手带动患手缓慢前上举',
+  steps:['坐位或站立，双手十指交叉握紧（患手拇指在上）','用健侧手臂带动双手，缓慢向前上方举起','举至与肩同高或感到拉伸，停留 2 秒','缓慢放下，重复进行'],
+  demoSpeed:2.2,
+  demoStart:{nose:[80,16],ls:[68,32],rs:[92,32],le:[66,52],re:[94,52],lw:[64,74],rw:[96,74],lh:[74,74],rh:[86,74],lk:[74,94],rk:[86,94],la:[74,106],ra:[86,106]},
+  demoEnd:{nose:[80,16],ls:[68,32],rs:[92,32],le:[72,34],re:[88,34],lw:[72,22],rw:[88,22],lh:[74,74],rh:[86,74],lk:[74,94],rk:[86,94],la:[74,106],ra:[86,106]},
+  evaluate(m){
+    if(!visible(m,[KP.lShoulder,KP.rShoulder,KP.lElbow,KP.rElbow,KP.lWrist,KP.rWrist,KP.lHip,KP.rHip]))
+      return lost('请退后一步，让上半身完整出现在画面中');
+    const ls=m[KP.lShoulder],rs=m[KP.rShoulder],lh=m[KP.lHip],rh=m[KP.rHip];
+    const le=m[KP.lElbow],re=m[KP.rElbow],lw=m[KP.lWrist],rw=m[KP.rWrist];
+    const gripDist=dist(lw,rw)/Math.max(dist(ls,rs),1);                 // 双手交叉程度
+    const flex=(vecAngle(le.x-ls.x,le.y-ls.y,lh.x-ls.x,lh.y-ls.y)+
+                vecAngle(re.x-rs.x,re.y-rs.y,rh.x-rs.x,rh.y-rs.y))/2;  // 双肩前屈平均角
+    const straight=(ang(ls,le,lw)+ang(rs,re,rw))/2;                     // 双肘伸直度
+    let score=scoreBand(flex,[60,120],[40,140]);
+    let status=score===100?'good':(score>=70?'warn':'bad');
+    let fb='';
+    if(gripDist>0.45){ if(score>60){score=60;status='warn';} fb='双手十指交叉握好（患手拇指在上），用健手带动抬起'; }
+    else if(flex<40) fb='用健侧手臂带动双手，缓慢向前上方举起';
+    else if(flex<60) fb='双手再向上举起一些，动作要慢';
+    else if(flex>120) fb='举得有点高了，回到舒适高度，不要耸肩';
+    else if(straight<135){ if(score>60){score=60;status='warn';} fb='手臂尽量伸直，如患侧紧张不要勉强'; }
+    else fb='非常标准，保持 2 秒后缓慢放下';
+    return {score,status,feedback:fb,compensation:gripDist>0.45?45:(straight<135?60:100),a:{val:Math.round(flex),min:60,max:120,label:'肩前屈角',unit:'°'},b:{val:Math.round(straight),min:135,max:180,label:'肘伸直度',unit:'°'}};
+  }
+},
+{
+  id:'shoulder-flex', name:'患侧肩部前屈', en:'SHOULDER FLEXION', cat:'上肢康复',
+  goal:'患侧手臂缓慢向前抬起，改善肩关节活动度',
+  steps:['坐位或站立，患侧手臂自然放松垂于体侧','缓慢向前抬起患侧手臂，尽量伸直','抬至与地面平行或感到拉伸，停留 2 秒','缓慢放下；无力时可用健手辅助'],
+  demoSpeed:2.2,
+  demoStart:{nose:[80,16],ls:[68,32],rs:[92,32],le:[66,52],re:[94,52],lw:[64,74],rw:[96,74],lh:[74,74],rh:[86,74],lk:[74,94],rk:[86,94],la:[74,106],ra:[86,106]},
+  demoEnd:{nose:[80,16],ls:[68,32],rs:[92,32],le:[66,52],re:[90,34],lw:[64,74],rw:[88,20],lh:[74,74],rh:[86,74],lk:[74,94],rk:[86,94],la:[74,106],ra:[86,106]},
+  evaluate(m){
+    if(!visible(m,[KP.lShoulder,KP.rShoulder,KP.lElbow,KP.rElbow,KP.lWrist,KP.rWrist,KP.lHip,KP.rHip]))
+      return lost('请退后一步，让上半身完整出现在画面中');
+    const S=State.affectedSide;
+    const ev=side=>{
+      const s=m[side==='l'?KP.lShoulder:KP.rShoulder], e=m[side==='l'?KP.lElbow:KP.rElbow],
+            w=m[side==='l'?KP.lWrist:KP.rWrist], h=m[side==='l'?KP.lHip:KP.rHip];
+      return {flex:vecAngle(e.x-s.x,e.y-s.y,h.x-s.x,h.y-s.y), straight:ang(s,e,w)};
+    };
+    const l=ev('l'), r=ev('r');
+    const main=S==='L'?l:(S==='R'?r:(Math.abs(l.flex-82.5)>=Math.abs(r.flex-82.5)?l:r));
+    const {flex,straight}=main;
+    let score=scoreBand(flex,[60,105],[40,125]);
+    let status=score===100?'good':(score>=70?'warn':'bad');
+    let fb='';
+    if(flex<40) fb='患侧手臂向前抬起，动作要慢';
+    else if(flex<60) fb='患侧手臂再抬高一点';
+    else if(flex>125) fb='抬得有点高了，回到与肩同高即可';
+    else if(straight<135){ if(score>60){score=60;status='warn';} fb='手臂尽量伸直，如患侧紧张不要勉强'; }
+    else fb='非常标准，保持 2 秒后缓慢放下';
+    return {score,status,feedback:fb,compensation:straight<135?55:100,a:{val:Math.round(flex),min:60,max:105,label:'肩前屈角',unit:'°'},b:{val:Math.round(straight),min:135,max:180,label:'肘伸直度',unit:'°'}};
+  }
+},
+{
+  id:'elbow-flex', name:'患侧肘关节屈伸', en:'ELBOW FLEXION', cat:'上肢康复',
+  goal:'患侧肘关节缓慢屈伸，改善肘部活动度',
+  steps:['坐位，上臂贴近身体，患侧前臂向前伸出','缓慢弯曲肘关节，前臂向肩膀方向抬起','屈至约 90° 或感到拉伸，停留 2 秒','缓慢伸直放下，重复进行'],
+  demoSpeed:2.4,
+  demoStart:{nose:[80,16],ls:[68,32],rs:[92,32],le:[66,52],re:[94,52],lw:[64,74],rw:[96,74],lh:[74,74],rh:[86,74],lk:[74,94],rk:[86,94],la:[74,106],ra:[86,106]},
+  demoEnd:{nose:[80,16],ls:[68,32],rs:[92,32],le:[66,52],re:[94,52],lw:[64,74],rw:[84,36],lh:[74,74],rh:[86,74],lk:[74,94],rk:[86,94],la:[74,106],ra:[86,106]},
+  evaluate(m){
+    if(!visible(m,[KP.lShoulder,KP.rShoulder,KP.lElbow,KP.rElbow,KP.lWrist,KP.rWrist,KP.lHip,KP.rHip]))
+      return lost('请退后一步，让上半身完整出现在画面中');
+    const S=State.affectedSide;
+    const ev=side=>{
+      const s=m[side==='l'?KP.lShoulder:KP.rShoulder], e=m[side==='l'?KP.lElbow:KP.rElbow],
+            w=m[side==='l'?KP.lWrist:KP.rWrist], h=m[side==='l'?KP.lHip:KP.rHip];
+      return {elbow:ang(s,e,w), tuck:Math.abs(e.x-s.x)/Math.max(dist(s,h),1)};
+    };
+    const l=ev('l'), r=ev('r');
+    const main=S==='L'?l:(S==='R'?r:(Math.abs(l.elbow-90)>=Math.abs(r.elbow-90)?l:r));
+    const {elbow,tuck}=main;
+    let score=scoreBand(elbow,[75,105],[55,125]);
+    let status=score===100?'good':(score>=70?'warn':'bad');
+    let fb='';
+    if(elbow>125) fb='患侧前臂再向肩膀弯曲一些';
+    else if(elbow<55) fb='弯曲过度了，缓慢伸直一点到 90 度';
+    else if(tuck>0.5){ if(score>60){score=60;status='warn';} fb='上臂离开身体了，请夹紧上臂再屈肘'; }
+    else if(elbow>105) fb='再弯曲一点，动作要慢';
+    else if(elbow<75) fb='稍微伸直一点，保持 90 度角';
+    else fb='非常标准，保持 2 秒后缓慢伸直';
+    return {score,status,feedback:fb,compensation:tuck>0.5?40:100,a:{val:Math.round(elbow),min:75,max:105,label:'肘关节角',unit:'°'},b:null};
+  }
+},
+{
+  id:'leg-raise', name:'患侧直腿抬高', en:'LEG RAISE', cat:'下肢康复',
+  goal:'患侧腿缓慢抬起，锻炼大腿前侧力量',
+  steps:['坐于稳固椅子上，腰背挺直','患侧腿缓慢向前上方抬起，膝盖尽量伸直','抬至感到拉伸，停留 2 秒','缓慢放下，重复进行'],
+  demoSpeed:2.2,
+  demoStart:{nose:[80,20],ls:[70,38],rs:[90,38],le:[68,58],re:[92,58],lw:[66,80],rw:[94,80],lh:[76,80],rh:[84,80],lk:[74,94],rk:[86,94],la:[74,108],ra:[86,108]},
+  demoEnd:{nose:[80,20],ls:[70,38],rs:[90,38],le:[68,58],re:[92,58],lw:[66,80],rw:[94,80],lh:[76,80],rh:[84,80],lk:[74,94],rk:[92,78],la:[74,108],ra:[100,68]},
+  evaluate(m){
+    if(!visible(m,[KP.lShoulder,KP.rShoulder,KP.lHip,KP.rHip,KP.lKnee,KP.rKnee,KP.lAnkle,KP.rAnkle]))
+      return lost('请退后一步，让下半身完整出现在画面中');
+    const S=State.affectedSide;
+    const ev=side=>{
+      const s=m[side==='l'?KP.lShoulder:KP.rShoulder], h=m[side==='l'?KP.lHip:KP.rHip],
+            k=m[side==='l'?KP.lKnee:KP.rKnee], a=m[side==='l'?KP.lAnkle:KP.rAnkle];
+      return {hipFlex:ang(s,h,k), straight:ang(h,k,a)};
+    };
+    const l=ev('l'), r=ev('r');
+    const main=S==='L'?l:(S==='R'?r:(l.hipFlex<=r.hipFlex?l:r));
+    const {hipFlex,straight}=main;
+    let score=scoreBand(hipFlex,[115,175],[90,180]);
+    let status=score===100?'good':(score>=70?'warn':'bad');
+    let fb='';
+    if(hipFlex<90) fb='请将患侧腿缓慢抬起';
+    else if(hipFlex<115) fb='患侧腿再抬高一点，膝盖尽量伸直';
+    else if(straight<140){ if(score>60){score=60;status='warn';} fb='膝盖弯曲了，尽量伸直腿部，不要勉强'; }
+    else fb='非常标准，保持 2 秒后缓慢放下';
+    return {score,status,feedback:fb,compensation:straight<140?55:100,a:{val:Math.round(hipFlex),min:115,max:175,label:'髋屈角度',unit:'°'},b:{val:Math.round(straight),min:140,max:180,label:'膝伸直度',unit:'°'}};
+  }
+},
+{
+  id:'sit-to-stand', name:'坐位起立训练', en:'SIT TO STAND', cat:'下肢与平衡',
+  goal:'从坐位缓慢站起并站稳，再缓慢坐下',
+  steps:['坐于稳固椅子上，双脚平放地面，身体稍前倾','双手扶好桌面或扶手作为支撑','缓慢站起至完全直立，站稳 2 秒','缓慢坐下，重复进行'],
+  demoSpeed:1.6,
+  demoStart:{nose:[80,22],ls:[70,38],rs:[90,38],le:[68,58],re:[92,58],lw:[66,80],rw:[94,80],lh:[76,80],rh:[84,80],lk:[74,94],rk:[86,94],la:[74,108],ra:[86,108]},
+  demoEnd:{nose:[80,14],ls:[70,28],rs:[90,28],le:[68,46],re:[92,46],lw:[66,66],rw:[94,66],lh:[76,62],rh:[84,62],lk:[76,84],rk:[84,84],la:[74,108],ra:[86,108]},
+  evaluate(m){
+    if(!visible(m,[KP.lShoulder,KP.rShoulder,KP.lHip,KP.rHip,KP.lKnee,KP.rKnee]))
+      return lost('请退后一步，让全身完整出现在画面中');
+    const ratios=[];
+    for(const side of ['l','r']){
+      const h=m[side==='l'?KP.lHip:KP.rHip], k=m[side==='l'?KP.lKnee:KP.rKnee];
+      ratios.push((k.y-h.y)/Math.max(dist(h,k),30));
+    }
+    const ratio=(ratios[0]+ratios[1])/2;
+    const pct=Math.min(100,Math.max(0,ratio*100));
+    let score,status,fb,repDone=false;
+    if(ratio>=0.35){
+      score=100; status='good';
+      if(State.sitPhase==='sit'){ State.sitPhase='stand'; fb='站起来了，请站稳 2 秒'; }
+      else fb='站得很稳，非常好，停留 2 秒后缓慢坐下';
+    }else if(ratio>=0.12){
+      score=60; status='warn';
+      fb=State.sitPhase==='sit'?'身体前倾，继续缓慢站起':'保持站稳，再缓慢坐下';
+    }else{
+      score=40; status='warn';
+      if(State.sitPhase==='stand'){ State.sitPhase='sit'; fb='坐下完成，做得很好'; repDone=true; }
+      else fb='请双手扶稳，身体前倾，缓慢站起来';
+    }
+    return {score,status,feedback:fb,compensation:100,a:{val:pct,min:35,max:70,label:'站立程度',unit:'%'},b:null,repDone};
+  }
+},
+{
+  id:'neck-lateral', name:'颈部侧屈', en:'NECK LATERAL FLEX', cat:'颈部康复',
+  goal:'头部分别向左、右肩缓慢倾斜，改善颈部活动',
+  steps:['坐直或站直，目视前方，肩膀放松下沉','头缓慢向左肩倾斜，右耳远离右肩','感到拉伸后保持 3 秒，回到正中','再向右肩倾斜，左右各一次为 1 组'],
+  demoSpeed:2.0,
+  demoStart:{nose:[80,16],ls:[68,32],rs:[92,32],le:[66,52],re:[94,52],lw:[64,74],rw:[96,74],lh:[74,74],rh:[86,74],lk:[74,94],rk:[86,94],la:[74,106],ra:[86,106]},
+  demoEnd:{nose:[88,24],ls:[68,32],rs:[92,32],le:[66,52],re:[94,52],lw:[64,74],rw:[96,74],lh:[74,74],rh:[86,74],lk:[74,94],rk:[86,94],la:[74,106],ra:[86,106]},
+  evaluate(m){
+    if(!visible(m,[KP.lEar,KP.rEar,KP.lShoulder,KP.rShoulder]))
+      return lost('请面对摄像头，让头部和肩膀完整出现在画面中');
+    const le=m[KP.lEar], re=m[KP.rEar], ls=m[KP.lShoulder], rs=m[KP.rShoulder];
+    const neckLen=(dist(le,ls)+dist(re,rs))/2;
+    const diff=Math.abs(le.y-re.y);
+    const ratio=neckLen? diff/neckLen : 0;
+    const dir=le.y>re.y? 'L' : 'R';
+    let score=scoreBand(ratio*100,[22,60],[15,60]);
+    let status=score===100?'good':(score>=70?'warn':'bad');
+    let fb='';
+    if(ratio<0.15) fb='请将头缓慢向一侧倾斜，耳朵靠近肩膀';
+    else if(ratio<0.22) fb='倾斜幅度再大一点，缓慢感受颈部侧面拉伸';
+    else fb=(dir==='L'?'头向左倾斜':'头向右倾斜')+'，拉伸到位，保持 3 秒';
+    const pct=Math.round(ratio*100);
+    return {score,status,feedback:fb,compensation:(Math.abs(ls.y-rs.y)/Math.max(dist(ls,rs),1))>.15?60:100,a:{val:pct,min:22,max:60,label:'侧屈幅度',unit:'%'},b:null,neckDir:dir,neckRatio:ratio};
+  }
+}
+];
+
+/* ===== 评分工具 ===== */
+function scoreBand(val,[gl,gh],[wl,wh]){
+  if(val>=gl&&val<=gh) return 100;
+  if(val>=wl&&val<=wh) return 70;
+  return 40;
+}
+function lost(fb){ return {score:0,status:'lost',feedback:fb,a:null,b:null}; }
+
+/* ===== 语音播报 ===== */
+/* ===== 多语言语音播报（中/英/韩） ===== */
+const VOICE_LANG = { zh:'zh-CN', en:'en-US', ko:'ko-KR' };
+let cachedVoices = [];
+
+function refreshSpeechVoices(){
+  try{
+    cachedVoices = window.speechSynthesis ? window.speechSynthesis.getVoices() : [];
+  }catch(e){ cachedVoices=[]; }
+}
+
+function pickSpeechVoice(lang){
+  const target = VOICE_LANG[lang] || 'zh-CN';
+  const list = cachedVoices || [];
+  return list.find(v=>v.lang === target)
+      || list.find(v=>v.lang && v.lang.toLowerCase().startsWith(target.slice(0,2).toLowerCase()))
+      || null;
+}
+
+function speak(text,force){
+  if(!State.voiceOn || !text) return;
+
+  if(!force){
+    const now=Date.now();
+    if(text===State.lastSpoke && now-State.lastSpokeAt<4000) return; // 同文案4秒节流
+  }
+
+  State.lastSpoke=text;
+  State.lastSpokeAt=Date.now();
+
+  try{
+    if(!window.speechSynthesis || !window.SpeechSynthesisUtterance) return;
+
+    const lang = VOICE_LANG[LANG] || 'zh-CN';
+    window.speechSynthesis.cancel();
+
+    const u = new SpeechSynthesisUtterance(String(text));
+    u.lang = lang;
+    u.rate = LANG==='ko' ? 0.95 : 1.0;
+    u.pitch = 1.05;
+
+    const voice = pickSpeechVoice(LANG);
+    if(voice) u.voice = voice;
+
+    window.speechSynthesis.speak(u);
+  }catch(e){
+    console.warn('语音播报不可用:', e);
+  }
+}
+
+if(window.speechSynthesis){
+  refreshSpeechVoices();
+  window.speechSynthesis.addEventListener('voiceschanged', refreshSpeechVoices);
+}
+
+/* ===== 示范动画 ===== */
+const demoSvg=document.getElementById('demoSvg');
+const DEMO_KEYS=['nose','ls','rs','le','re','lw','rw','lh','rh','lk','rk','la','ra'];
+let demoAngle=0, demoT=0;
+function drawDemo(){
+  const ex=EXERCISES[State.exIndex];
+  const p=0.5+0.5*Math.sin(demoT*ex.demoSpeed);
+  const pts={};
+  for(const k of DEMO_KEYS){
+    const s=ex.demoStart[k], e=ex.demoEnd[k];
+    pts[k]={x:s[0]+(e[0]-s[0])*p, y:s[1]+(e[1]-s[1])*p};
+  }
+  const lines=[['nose','ls'],['nose','rs'],['ls','rs'],['ls','le'],['le','lw'],['rs','re'],['re','rw'],
+    ['ls','lh'],['rs','rh'],['lh','rh'],['lh','lk'],['lk','la'],['rh','rk'],['rk','ra']];
+  let html='';
+  for(const [a,b] of lines){
+    html+=`<line x1="${pts[a].x}" y1="${pts[a].y}" x2="${pts[b].x}" y2="${pts[b].y}" stroke="#0E8A8A" stroke-width="4.5" stroke-linecap="round" opacity=".85"/>`;
+  }
+  html+=`<circle cx="${pts.nose.x}" cy="${pts.nose.y}" r="7" fill="#0E8A8A" opacity=".9"/>`;
+  // 运动轨迹指示：主活动关节的弧线箭头提示
+  html+=`<g stroke="#E09A2B" stroke-width="2" fill="none" opacity=".8">`;
+  const arc=ex.arc; if(arc){ for(const a of arc) html+=`<path d="${a}" stroke-dasharray="3 3"/>`; }
+  html+=`</g>`;
+  demoSvg.innerHTML=html;
+}
+function demoLoop(){ drawDemo(); demoT+=0.05; requestAnimationFrame(demoLoop); }
+
+/* ===== DOM 引用 ===== */
+const $=id=>document.getElementById(id);
+const video=$('video'), overlay=$('overlay'), camPlaceholder=$('camPlaceholder');
+const camStatusbar=$('camStatusbar'), statusTag=$('statusTag'), statusText=$('statusText');
+const scoreNum=$('scoreNum'), ringFg=$('ringFg'), angleStrip=$('angleStrip');
+const angleValA=$('angleValA'), angleFill=$('angleFill'), angleTarget=$('angleTarget'), angleItemB=$('angleItemB'), angleValB=$('angleValB');
+const catLabel=$('catLabel'), exIco=$('exIco'), exName=$('exName'), exEn=$('exEn'), goalLine=$('goalLine'), stepList=$('stepList');
+const feedbackCard=$('feedbackCard'), feedbackState=$('feedbackState'), feedbackMsg=$('feedbackMsg');
+const qualityPhase=$('qualityPhase'), qualityAngle=$('qualityAngle'), qualityStability=$('qualityStability'), qualitySpeed=$('qualitySpeed'), qualityComp=$('qualityComp');
+const statCount=$('statCount'), statTime=$('statTime'), statHold=$('statHold'), restHint=$('restHint'), restNum=$('restNum');
+const pauseBtn=$('pauseBtn'), resetBtn=$('resetBtn'), endBtn=$('endBtn'), calibrateBtn=$('calibrateBtn'), dockScroll=$('dockScroll'), startBtn=$('startBtn');
+const streakDaysEl=$('streakDays'), todayMinutesEl=$('todayMinutes'), weekMinutesEl=$('weekMinutes'), goalSelect=$('goalSelect'), goalFill=$('goalFill'), goalElapsed=$('goalElapsed'), goalRemain=$('goalRemain'), historyList=$('historyList');
+const camBadge=$('camBadge'), camBadgeText=$('camBadgeText'), voiceToggle=$('voiceToggle'), voiceLabel=$('voiceLabel'), timerChip=$('timerChip');
+const toastEl=$('toast'), loader=$('loader'), loadText=$('loadText'), loadSub=$('loadSub');
+[feedbackMsg,statusText,qualityPhase].forEach(el=>el?.setAttribute('aria-live','polite'));
+
+/* ===== 语音全局节流 ===== */
+let lastAnySpeak=0;
+const MESSAGE_I18N={
+  repComplete:{zh:n=>`第 ${n} 次完成，做得很好`,en:n=>`Rep ${n} completed. Well done.`,ko:n=>`${n}회 완료했습니다. 잘하셨습니다.`},
+  holdSeconds:{zh:n=>`保持 ${n} 秒，继续坚持`,en:n=>`Hold for ${n} seconds. Keep going.`,ko:n=>`${n}초 유지하세요. 계속하세요.`},
+  goalComplete:{zh:()=>`本次设定的训练时间目标已完成，可以根据医嘱决定是否继续`,en:()=>`Your session time goal is complete. Continue only according to your medical guidance.`,ko:()=>`설정한 훈련 시간이 완료되었습니다. 의료진의 지시에 따라 계속하세요.`},
+  sessionSaved:{zh:()=>`本次训练已保存`,en:()=>`This training session has been saved.`,ko:()=>`이번 훈련 기록이 저장되었습니다.`},
+  affectedChanged:{zh:()=>`患侧已切换`,en:()=>`Affected side changed.`,ko:()=>`환측이 변경되었습니다.`}
+};
+function msg(id,...args){ const x=MESSAGE_I18N[id]; if(!x) return ''; const lang=window.REHAB_LANG||'zh'; const fn=x[lang]||x.zh; return fn(...args); }
+function say(text,force){
+  const now=Date.now();
+  if(!force && now-lastAnySpeak<1500) return;
+  lastAnySpeak=now;
+  speak(text,true);
+}
+
+
+/* ===== 连续训练与时间记录（仅保存在本设备 localStorage） ===== */
+const HISTORY_KEY=CONFIG.storage.historyKey; const LEGACY_HISTORY_KEY='stroke_rehab_training_history_v1';
+const GOAL_KEY=CONFIG.storage.goalKey; const LEGACY_GOAL_KEY='stroke_rehab_goal_minutes_v1';
+function getHistory(){
+  try{
+    let x=JSON.parse(localStorage.getItem(HISTORY_KEY)||'');
+    if(!Array.isArray(x)) x=JSON.parse(localStorage.getItem(LEGACY_HISTORY_KEY)||'[]');
+    return Array.isArray(x)?x:[];
+  }catch(e){ return []; }
+}
+function saveHistory(list){
+  try{ localStorage.setItem(HISTORY_KEY,JSON.stringify(list.slice(-CONFIG.training.maxHistory))); }catch(e){}
+}
+function localDateKey(ts){
+  const d=new Date(ts);
+  const y=d.getFullYear(),m=String(d.getMonth()+1).padStart(2,'0'),day=String(d.getDate()).padStart(2,'0');
+  return `${y}-${m}-${day}`;
+}
+function dateFromKey(k){ const [y,m,d]=k.split('-').map(Number); return new Date(y,m-1,d); }
+function dayDiff(a,b){ return Math.round((dateFromKey(b)-dateFromKey(a))/86400000); }
+function getGoalMinutes(){
+  let v=10;
+  try{ v=parseInt(localStorage.getItem(GOAL_KEY)||localStorage.getItem(LEGACY_GOAL_KEY)||'10',10); }catch(e){}
+  return [5,10,15,20].includes(v)?v:10;
+}
+function setGoalMinutes(v){
+  v=parseInt(v,10); if(![5,10,15,20].includes(v)) v=10;
+  try{ localStorage.setItem(GOAL_KEY,String(v)); }catch(e){}
+  updateDisciplineUI();
+}
+function qualifyDaySeconds(list,key){
+  return list.filter(r=>r.date===key).reduce((s,r)=>s+Number(r.durationSec||0),0);
+}
+function calcStreak(list){
+  const days=[...new Set(list.filter(r=>Number(r.durationSec||0)>=60).map(r=>r.date))].sort().reverse();
+  if(!days.length) return 0;
+  const today=localDateKey(Date.now());
+  let cursor=days[0];
+  // 若最近一次训练不是今天或昨天，则当前连续训练为 0。
+  if(dayDiff(cursor,today)>1) return 0;
+  let streak=1;
+  for(let i=1;i<days.length;i++){
+    if(dayDiff(days[i],cursor)===1){ streak++; cursor=days[i]; }
+    else break;
+  }
+  return streak;
+}
+function updateDisciplineUI(){
+  if(!streakDaysEl) return;
+  const list=getHistory();
+  const today=localDateKey(Date.now());
+  const now=new Date();
+  const weekStart=new Date(now.getFullYear(),now.getMonth(),now.getDate()-now.getDay());
+  const weekKey=localDateKey(weekStart.getTime());
+  const todaySec=qualifyDaySeconds(list,today);
+  const weekSec=list.filter(r=>r.date>=weekKey).reduce((s,r)=>s+Number(r.durationSec||0),0);
+  streakDaysEl.textContent=calcStreak(list);
+  todayMinutesEl.textContent=Math.floor(todaySec/60);
+  weekMinutesEl.textContent=Math.floor(weekSec/60);
+  const goal=getGoalMinutes();
+  if(goalSelect && goalSelect.value!==String(goal)) goalSelect.value=String(goal);
+  const elapsed=Math.floor(elapsedMs()/1000);
+  const pct=Math.min(100,elapsed/(goal*60)*100);
+  goalFill.style.width=pct+'%';
+  goalElapsed.textContent='本次 '+fmtTime(elapsed*1000);
+  goalRemain.textContent=elapsed>=goal*60?'目标已完成':'目标 '+fmtTime(goal*60*1000);
+  if(pct>=100 && State.running && !State.paused && !State.goalAnnounced){
+    State.goalAnnounced=true;
+    say(msg('goalComplete'),true);
+    toast('本次时间目标已完成');
+  }
+  if(historyList){
+    const recent=list.slice().reverse().slice(0,5);
+    historyList.innerHTML=recent.length?recent.map(r=>{
+      const mins=Math.floor(Number(r.durationSec||0)/60), secs=Number(r.durationSec||0)%60;
+      const dur=mins+':'+String(secs).padStart(2,'0');
+      const name=(r.exercise||'训练').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+      return `<div class="history-row"><span>${r.date} · ${name}</span><b>${dur} · ${r.count||0} 次</b></div>`;
+    }).join(''):'<div class="history-row"><span>还没有训练记录</span><b>—</b></div>';
+  }
+}
+
+function summarizeQuality(){
+  const a=State.qualitySamples||[];
+  if(!a.length) return {samples:0,total:0,angle:0,stability:0,speed:0,compensation:0};
+  const avg=k=>a.reduce((s,x)=>s+Number(x[k]||0),0)/a.length;
+  return {samples:a.length,total:Math.round(avg('total')),angle:Math.round(avg('angle')),stability:Math.round(avg('stability')),speed:Math.round(avg('speed')),compensation:Math.round(avg('comp'))};
+}
+function recordSession(reason){
+  if(!State.sessionStart || State.sessionRecorded) return null;
+  const ms=elapsedMs();
+  State.sessionRecorded=true;
+  const sec=Math.max(0,Math.floor(ms/1000));
+  if(sec<CONFIG.training.minRecordSeconds) return null;
+  const item={
+    date:localDateKey(Date.now()),
+    startedAt:State.sessionStart,
+    endedAt:Date.now(),
+    durationSec:sec,
+    count:State.count,
+    exercise:EXERCISES[State.exIndex].name,
+    reason:reason||'end',
+    algorithmVersion:CONFIG.appVersion,
+    quality:summarizeQuality(),
+    calibration:State.calibration?{samples:State.calibration.samples,reliability:State.calibration.reliability}:null,
+    validQualitySec:Number(State.validQualityTime.toFixed(1)),
+    phaseModel:'target-hold-return'
+  };
+  const list=getHistory(); list.push(item); saveHistory(list);
+  updateDisciplineUI();
+  return item;
+}
+function endTraining(reason='manual'){
+  if(!State.videoOn && !State.running) return;
+  const item=recordSession(reason);
+  State.running=false; State.paused=false; State.videoOn=false;
+  clearTimeout(detectId); detectId=null;
+  clearInterval(State.timerId); clearInterval(State.restTimerId);
+  clearInterval(camRefreshId); camRefreshId=null;
+  restHint.classList.remove('show');
+  stopCamera();
+  overlay.style.display='none';
+  angleStrip.style.display='none';
+  camPlaceholder.style.display='flex';
+  camStatusbar.style.display='none';
+  camBadge.className='badge idle'; camBadgeText.textContent='摄像头未开启';
+  feedbackCard.className='panel-card feedback-card lost';
+  feedbackState.style.color='var(--lost)'; feedbackState.textContent='准备就绪';
+  feedbackMsg.textContent='选择动作并开始训练后，这里会实时显示动作质量与纠正建议。';
+  setStatus('lost','等待开始训练');
+  pauseBtn.disabled=true; endBtn.disabled=true; calibrateBtn.disabled=true;
+  State.calibrationActive=false; State.calibration=null; State.metricHistory=[]; State.qualitySamples=[]; State.lastPrimaryMetric=null; State.phase='idle'; resetRepState(); State.neckSequence='neutral'; State.validQualityTime=0; AppController.setPhase(APP_PHASE.IDLE,'training-ended');
+  qualityPhase.textContent='待机'; qualityAngle.textContent='—'; qualityStability.textContent='—'; qualitySpeed.textContent='—'; qualityComp.textContent='—';
+  pauseBtn.innerHTML='<svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M6 5h4v14H6zM14 5h4v14h-4z"/></svg>暂停';
+  State.sessionStart=0; elapsedStart=0; State.goalAnnounced=false; State.sessionRecorded=false;
+  State.count=0; State.holdTime=0; State.holdReported=0; State.goodFrames=0,State.goodTime=0; State.neckSide=null;
+  startBtn.disabled=false;
+  startBtn.innerHTML='<svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>开始训练';
+  // 清除 #camera-start，确保下一次点击同一个“开始训练”链接仍能触发启动。
+  if(location.hash==='#camera-start'){ history.replaceState(null,document.title,location.pathname+location.search); }
+  updateStats(); updateDisciplineUI();
+  if(item){
+    toast(`本次训练已记录：${fmtTime(item.durationSec*1000)}，完成 ${item.count} 次`);
+    say(msg('sessionSaved'),true);
+    setTimeout(()=>showTrainingReport(item),120);
+  }else toast('本次训练时间较短，未保存为训练记录');
+}
+
+/* ===== 模型与摄像头 ===== */
+function loadScript(src){
+  return new Promise((res,rej)=>{
+    const s=document.createElement('script');
+    s.src=src; s.onload=res; s.onerror=()=>rej(new Error('script:'+src));
+    document.head.appendChild(s);
+  });
+}
+async function loadScriptAny(srcs){
+  let last; for(const u of srcs){ try{ await loadScript(u); return; }catch(e){ last=e; } } throw last;
+}
+async function loadModels(){
+  if(State.detector) return;
+  loadText.textContent='正在加载 AI 姿态识别模型…';
+  loadSub.textContent='正在下载 AI 组件（第 1/3 步），网络较慢时请耐心等待';
+  if(!window.tf) await loadScriptAny(['https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@4.22.0/dist/tf.min.js','https://unpkg.com/@tensorflow/tfjs@4.22.0/dist/tf.min.js']);
+  try{ await tf.setBackend('webgl'); }catch(e){ try{ await tf.setBackend('cpu'); }catch(e2){} }
+  await tf.ready();
+  loadSub.textContent='模型组件加载中（第 2/3 步）…';
+  if(!window.poseDetection) await loadScriptAny(['https://cdn.jsdelivr.net/npm/@tensorflow-models/pose-detection@2.1.3/dist/pose-detection.js','https://unpkg.com/@tensorflow-models/pose-detection@2.1.3/dist/pose-detection.js']);
+  loadSub.textContent='正在初始化姿态检测器（第 3/3 步）…';
+  // 优先 THUNDER（精度更高）；失败则回退 LIGHTNING（体积更小、更易加载）。
+  // 若把模型文件放在 ./models/movenet_thunder/ 或 ./models/movenet_lightning/ 下，将优先使用本地文件（最稳定）。
+  const MT=poseDetection.movenet.modelType;
+  let lastErr;
+  for(const [name,mt] of [['thunder',MT.SINGLEPOSE_THUNDER],['lightning',MT.SINGLEPOSE_LIGHTNING]]){
+    for(const u of ['./models/movenet_'+name+'/model.json',null]){
+      for(let k=0;k<2;k++){
+        try{
+          if(u){ let ok=false; try{ ok=(await fetch(u,{method:'HEAD'})).ok; }catch(_){} if(!ok) break; }
+          State.detector=await poseDetection.createDetector(poseDetection.SupportedModels.MoveNet,
+            Object.assign({modelType:mt,enableSmoothing:true},u?{modelUrl:u}:{}));
+          return;
+        }catch(e){ lastErr=e; console.warn('模型加载重试',name,u,e); await new Promise(rs=>setTimeout(rs,1200)); }
+      }
+    }
+  }
+  throw lastErr||new Error('model-load-failed');
+}
+async function initCamera(){
+  // getUserMedia 只能在安全上下文中使用（Netlify 正常应为 HTTPS）。
+  if(!window.isSecureContext){
+    throw Object.assign(new Error('camera-insecure-context'),{name:'SecurityError'});
+  }
+  if(!navigator.mediaDevices || typeof navigator.mediaDevices.getUserMedia!=='function'){
+    throw Object.assign(new Error('camera-api-unavailable'),{name:'SecurityError'});
+  }
+
+  let stream;
+  try{
+    stream=await navigator.mediaDevices.getUserMedia({
+      video:{width:{ideal:1280},height:{ideal:720},facingMode:{ideal:'user'}},
+      audio:false
+    });
+  }catch(e){
+    // 某些 Safari / 手机浏览器不接受较具体的约束，退回最兼容的写法。
+    if(e && (e.name==='OverconstrainedError' || e.name==='ConstraintNotSatisfiedError')){
+      stream=await navigator.mediaDevices.getUserMedia({video:true,audio:false});
+    }else{
+      throw e;
+    }
+  }
+
+  video.srcObject=stream;
+  video.setAttribute('playsinline','true');
+  video.muted=true;
+  await video.play();
+}
+function stopCamera(){
+  if(video.srcObject){ video.srcObject.getTracks().forEach(t=>t.stop()); video.srcObject=null; }
+}
+function withTimeout(promise,ms,name){
+  return new Promise((resolve,reject)=>{
+    const t=setTimeout(()=>reject(Object.assign(new Error('timeout:'+name),{name:'TimeoutError',timeoutName:name})),ms);
+    promise.then(v=>{clearTimeout(t);resolve(v);},e=>{clearTimeout(t);reject(e);});
+  });
+}
+
+/* ===== 开始 / 暂停 / 重置 ===== */
+let loadModelsFailed=false, camRefreshId=null;
+function inIframe(){ try{ return window.self!==window.top; }catch(e){ return true; } }
+async function cameraPermissionState(){
+  try{
+    const st=await navigator.permissions.query({name:'camera'});
+    return st.state;              // 'granted' | 'prompt' | 'denied'
+  }catch(e){ return 'unknown'; } // 部分浏览器不支持查询，走正常流程
+}
+function showCamError(title,steps){
+  const el=$('camError'), tx=$('camErrorText');
+  if(!el||!tx) return;
+  tx.innerHTML='<b>'+title+'</b>'+(steps?'<ol>'+steps.map(s=>'<li>'+s+'</li>').join('')+'</ol>':'');
+  el.style.display='flex';
+}
+function hideCamError(){ const el=$('camError'); if(el) el.style.display='none'; }
+async function startTrain(){
+  AppController.setPhase(APP_PHASE.CAMERA,'start-training');
+  startBtn.disabled=true;
+  loader.classList.add('show');
+  toast('正在请求摄像头权限…');
+  loadModelsFailed=false;
+  let camOk=false;
+  hideCamError();
+  if(inIframe()){
+    loader.classList.remove('show');
+    startBtn.disabled=false;
+    toast('预览模式无法调用摄像头，请在新标签页打开本网站');
+    showCamError('当前页面是嵌入式预览，浏览器禁止它直接调用摄像头',[
+      '点击「在新标签页打开」',
+      '在新标签页中打开 Netlify 网站后，再点击「开始训练」',
+      '出现摄像头权限提示时选择「允许」'
+    ]);
+    return; // 关键修复：不要继续在 iframe 中执行 getUserMedia()
+  }
+  try{
+    /* 第一步：直接在点击链路中发起摄像头请求，避免 Safari 因前置 await 丢失用户手势上下文 */
+    loadText.textContent='正在连接摄像头…';
+    loadSub.textContent='请在浏览器弹窗中点击「允许」使用摄像头（若没有弹窗，请看上方错误提示）';
+    await withTimeout(initCamera(),8000,'cameraTimeout');
+    camOk=true;
+    camPlaceholder.style.display='none';
+    camStatusbar.style.display='flex';
+    angleStrip.style.display='flex';
+    overlay.style.display='block';
+    camBadge.className='badge ready'; camBadgeText.textContent='画面已接入';
+    AppController.setPhase(APP_PHASE.LOADING,'camera-ready');
+    pauseBtn.disabled=false;
+    endBtn.disabled=false;
+    setStatus('lost','摄像头已连接，正在加载 AI 模型…');
+    drawFrame(null);
+    /* 第二步：加载姿态识别模型（失败则降级为仅画面模式，不启动计时） */
+    try{
+      loadText.textContent='正在加载 AI 姿态识别模型…';
+      loadSub.textContent='需要下载约 3MB 模型（第 1/3 步），请稍候；若网络不畅将降级为仅画面模式';
+      await withTimeout(loadModels(),90000,'modelTimeout');
+    }catch(me){
+      loadModelsFailed=true;
+      console.error('模型加载失败：',me);
+      setStatus('lost','模型加载失败：仅显示画面，无法识别动作');
+      toast('AI 模型加载失败，已降级为仅摄像头画面模式。请检查网络后刷新页面重试。');
+    }
+    if(loadModelsFailed){
+      State.videoOn=true; State.running=false;
+      clearInterval(camRefreshId);
+      camRefreshId=setInterval(()=>drawFrame(null),120);
+      return;
+    }
+    /* 第三步：一切就绪，开始识别与计时 */
+    AppController.setPhase(APP_PHASE.READY,'model-ready');
+    State.running=true; State.videoOn=true;
+    State.sessionRecorded=false; State.goalAnnounced=false;
+    State.calibration=calibrationForExercise(); State.calibrationActive=false; State.phase='training';
+    State.metricHistory=[]; State.qualitySamples=[]; State.lastPrimaryMetric=null; State.lastMetricTime=0;
+    AppController.setPhase(APP_PHASE.TRAINING,'model-ready');
+    qualityPhase.textContent=State.calibration?'已校准':'未校准';
+    calibrateBtn.disabled=false;
+    State.sessionStart=Date.now();
+    resetPoseSmoothing();
+    camBadgeText.textContent='识别中';
+    startTimer();
+    detectLoop();
+    setStatus('lost','等待识别…');
+    feedbackMsg.textContent='已就绪，请保持全身在画面中，开始做「'+EXERCISES[State.exIndex].name+'」';
+  }catch(e){
+    console.error(e);
+    let msg='启动失败，请重试';
+    const frame=inIframe();
+    if(e&&e.name==='NotAllowedError'){
+      msg=frame
+        ? '摄像头权限被拒绝：请在新标签页打开本链接后允许摄像头'
+        : '摄像头权限被拒绝：请在浏览器地址栏允许使用摄像头后，重新点击开始训练';
+      showCamError('无法使用摄像头：权限被浏览器阻止',[
+        '点击地址栏左侧的摄像头图标（或打开 chrome://settings/content/camera 检查本网站权限）',
+        '将本网站的「摄像头」从「阻止」改为「允许」',
+        '刷新页面后，重新点击「开始训练」'
+      ]);
+    }
+    else if(e&&e.name==='NotFoundError'){
+      msg='未检测到摄像头设备：请确认摄像头已连接、未被禁用后重试';
+      showCamError('未检测到摄像头设备',['请确认电脑摄像头已连接且未被禁用','关闭占用摄像头的其他程序后刷新重试']);
+    }
+    else if(e&&e.name==='NotReadableError'){
+      msg='摄像头被其他应用占用：请关闭占用摄像头的程序（如视频会议软件）后重试';
+      showCamError('摄像头正被其他程序占用',['关闭视频会议、直播等占用摄像头的应用','刷新页面后重试']);
+    }
+    else if(e&&e.name==='SecurityError'){
+      msg='当前环境不允许访问摄像头：请使用 https 链接并在浏览器新标签页中打开本页面';
+      showCamError('当前页面环境不允许调用摄像头',[
+        '确认地址栏以 https:// 开头（Netlify 部署地址应为 HTTPS）',
+        '不要在 Netlify/ChatGPT/其他网站的嵌入式预览中使用，请在 Safari 或 Chrome 的独立标签页打开',
+        '检查浏览器的网站摄像头权限是否设置为「允许」'
+      ]);
+    }
+    else if(e&&e.name==='TypeError'&&(!navigator.mediaDevices||typeof navigator.mediaDevices.getUserMedia!=='function')){
+      msg='当前浏览器不支持或未开放摄像头 API，请使用最新 Safari 或 Chrome 的 HTTPS 独立网页打开';
+      showCamError('浏览器没有可用的摄像头接口',[
+        '确认使用最新 Safari 或 Chrome',
+        '确认网址以 https:// 开头',
+        '不要使用网页内嵌预览，改用浏览器独立标签页打开'
+      ]);
+    }
+    else if(e&&e.name==='TimeoutError'&&e.timeoutName==='modelTimeout'){
+      msg='AI 模型加载较慢，已进入摄像头模式；请检查网络后再试';
+      showCamError('AI 模型加载超时（'+Math.round(CONFIG.camera.modelTimeoutMs/1000)+' 秒）',[
+        '摄像头已经连接，可以继续查看画面',
+        '如需动作识别，请检查网络后重新开始训练',
+        '不需要刷新网页，点击「结束训练」后可以直接再次开始'
+      ]);
+      // 保留摄像头画面，不让模型网络问题把页面卡在“正在启动”。
+      State.videoOn=true; State.running=false; AppController.setPhase(APP_PHASE.DEGRADED,'model-load-failed');
+      camPlaceholder.style.display='none';
+      camStatusbar.style.display='flex';
+      angleStrip.style.display='none';
+      overlay.style.display='block';
+      camBadge.className='badge ready'; camBadgeText.textContent='画面已接入';
+      endBtn.disabled=false;
+      drawFrame(null);
+    }
+    else if(e&&(e.name==='TimeoutError'||(e.message&&e.message.indexOf('timeout:')===0))){
+      msg='摄像头无响应：当前浏览器或代理环境可能拦截了摄像头请求';
+      showCamError('摄像头长时间无响应（超过 8 秒）',[
+        '确认在 Safari 独立标签页打开本网站',
+        '确认地址栏以 https:// 开头（Netlify 链接即为 https）',
+        '检查网站摄像头权限是否为「允许」后重试'
+      ]);
+    }
+    else if(e&&e.message&&e.message.indexOf('script:')===0){
+      msg='AI 模型下载失败：请检查网络连接后刷新页面重试';
+      AppController.setPhase(APP_PHASE.DEGRADED,'model-load-failed');
+      showCamError('AI 模型下载失败',['请检查网络连接后刷新页面','若网络受限，页面仍可显示摄像头画面（无动作识别）']);
+    }
+    else{
+      msg='启动失败：'+((e&&e.message)||'未知错误')+'，请刷新重试';
+      showCamError('启动失败',['刷新页面后重试','若仍失败，请把浏览器弹出的提示或地址栏权限图标状态告诉我']);
+    }
+    if(!frame && e&&e.name==='NotAllowedError' && camOk) msg='摄像头已连接，但模型加载失败，已降级为仅画面模式';
+    toast(msg);
+  }finally{
+    loader.classList.remove('show');
+    startBtn.disabled=false;
+    if(startBtn && !State.videoOn){
+      startBtn.innerHTML='<svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>开始训练';
+    }
+  }
+}
+function togglePause(){
+  State.paused=!State.paused;
+  AppController.setPhase(State.paused?APP_PHASE.PAUSED:APP_PHASE.TRAINING,'pause-toggle');
+  pauseBtn.innerHTML=State.paused
+    ? '<svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>继续'
+    : '<svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M6 5h4v14H6zM14 5h4v14h-4z"/></svg>暂停';
+  if(State.paused){ elapsedStart=Date.now()-State.sessionStart; }
+  else{ State.sessionStart=Date.now()-elapsedStart; }
+  setStatus(State.paused?'lost':'warn', State.paused?'已暂停':'已继续，请继续训练');
+}
+let elapsedStart=0;
+function elapsedMs(){
+  if(!State.sessionStart) return 0;                 // 未开始训练时恒为 00:00
+  return State.paused?elapsedStart:(Date.now()-State.sessionStart);
+}
+function resetStats(){
+  State.count=0; State.holdTime=0; State.holdReported=0; State.goodFrames=0,State.goodTime=0; State.neckSide=null;
+  State.metricHistory=[]; State.qualitySamples=[]; State.lastPrimaryMetric=null; State.phase='training'; resetRepState(); State.neckSequence='neutral'; State.validQualityTime=0; AppController.setPhase(APP_PHASE.TRAINING,'reset');
+  State.resting=false; State.sitPhase='sit'; clearInterval(State.restTimerId); restHint.classList.remove('show');
+  State.sessionStart=Date.now();
+  State.goalAnnounced=false;
+  updateStats(); updateDisciplineUI(); toast('本次训练计时与次数已重置');
+}
+
+/* ===== 检测主循环 ===== */
+let detectId=null;
+function mapKpts(kpts){
+  const m={};
+  for(const k of kpts) m[k.name]=k;
+  return m;
+}
+async function detectLoop(){
+  if(!State.running) return;
+  const _now=performance.now();
+  State.lastDt=State.lastT?Math.min(0.5,(_now-State.lastT)/1000):0.066; State.lastT=_now;
+  if(State.detector && video.readyState>=2){
+    try{
+      if(!State.paused){
+        const poses=await State.detector.estimatePoses(video,{flipHorizontal:false});
+        const rawKpts=poses&&poses[0]&&poses[0].keypoints?poses[0].keypoints:null;
+        const kpts=rawKpts?smoothPose(rawKpts):null;
+        drawFrame(kpts);
+        if(kpts&&kpts.length) evaluateAndFeedback(mapKpts(kpts));
+        else setStatus('lost','未检测到人体，请调整位置站在画面中央');
+      }else{
+        drawFrame(null);
+      }
+    }catch(err){ console.error(err); }
+  }
+  detectId=setTimeout(detectLoop,CONFIG.pose.loopMs);
+}
+
+/* ===== 画面绘制（镜像 + 骨骼叠加） ===== */
+const HIGHLIGHT={
+  'bobath-raise':[KP.lShoulder,KP.rShoulder,KP.lElbow,KP.rElbow,KP.lWrist,KP.rWrist],
+  'shoulder-flex':[KP.lShoulder,KP.rShoulder,KP.lElbow,KP.rElbow,KP.lWrist,KP.rWrist],
+  'elbow-flex':[KP.lElbow,KP.rElbow,KP.lWrist,KP.rWrist],
+  'leg-raise':[KP.lHip,KP.rHip,KP.lKnee,KP.rKnee,KP.lAnkle,KP.rAnkle],
+  'sit-to-stand':[KP.lHip,KP.rHip,KP.lKnee,KP.rKnee],
+  'neck-lateral':[KP.lEar,KP.rEar]
+};
+const STATUS_COLOR={good:'#1FA96A',warn:'#E09A2B',bad:'#DC5B4C',lost:'#8FA3AB'};
+function drawFrame(kpts){
+  const c=overlay.getContext('2d');
+  const cw=overlay.clientWidth||640, ch=overlay.clientHeight||480;
+  if(overlay.width!==cw||overlay.height!==ch){ overlay.width=cw; overlay.height=ch; }
+  c.clearRect(0,0,cw,ch);
+  c.save(); c.scale(-1,1); c.translate(-cw,0);
+  const vw=video.videoWidth, vh=video.videoHeight;
+  if(vw&&vh){
+    const scale=Math.max(cw/vw,ch/vh);
+    const sw=cw/scale, sh=ch/scale, sx=(vw-sw)/2, sy=(vh-sh)/2;
+    c.drawImage(video,sx,sy,sw,sh,0,0,cw,ch);
+    if(kpts&&kpts.length){
+      const mapX=k=>(k.x-sx)/sw*cw; // 画布已整体镜像，关键点与画面同一坐标系，不能再翻转
+      const mapY=k=>(k.y-sy)/sh*ch;
+      const P=kpts.filter(k=>k.score>0.3).map(k=>({...k,x:mapX(k),y:mapY(k)}));
+      drawSkeleton(c,P,cw,ch);
+    }
+  }
+  c.restore();
+}
+const BONES=[[KP.nose,KP.lShoulder],[KP.nose,KP.rShoulder],[KP.lShoulder,KP.rShoulder],
+  [KP.lShoulder,KP.lElbow],[KP.lElbow,KP.lWrist],[KP.rShoulder,KP.rElbow],[KP.rElbow,KP.rWrist],
+  [KP.lShoulder,KP.lHip],[KP.rShoulder,KP.rHip],[KP.lHip,KP.rHip],
+  [KP.lHip,KP.lKnee],[KP.lKnee,KP.lAnkle],[KP.rHip,KP.rKnee],[KP.rKnee,KP.rAnkle]];
+function drawSkeleton(c,P,cw,ch){
+  const byName={}; for(const p of P) byName[p.name]=p;
+  const hl=HIGHLIGHT[EXERCISES[State.exIndex].id]||[];
+  const curColor=STATUS_COLOR[lastStatus]||'#0E8A8A';
+  c.lineWidth=Math.max(3,cw/220); c.lineCap='round'; c.lineJoin='round';
+  for(const [a,b] of BONES){
+    const pa=byName[a], pb=byName[b];
+    if(!pa||!pb) continue;
+    c.strokeStyle='rgba(46,204,182,0.75)';
+    c.beginPath(); c.moveTo(pa.x,pa.y); c.lineTo(pb.x,pb.y); c.stroke();
+  }
+  const r=Math.max(4,cw/160);
+  for(const p of P){
+    const isHl=hl.indexOf(p.name)>=0;
+    c.fillStyle=isHl?curColor:'#2DCCC0';
+    c.beginPath(); c.arc(p.x,p.y,r,0,Math.PI*2); c.fill();
+    if(isHl){ c.strokeStyle='rgba(255,255,255,.9)'; c.lineWidth=1.5; c.stroke(); }
+  }
+}
+
+/* ===== 评估与反馈 ===== */
+let lastStatus='lost';
+// 距离/构图检测：很多"识别不准"其实是用户离摄像头太近或太远，导致关键点定位本身就不稳。
+// 用双肩宽度占画面宽度的比例粗略估计距离，在明显不合适时优先提示调整站位，而不是给出误导性的动作反馈。
+function checkFraming(m){
+  const ls=m[KP.lShoulder], rs=m[KP.rShoulder];
+  if(!ls||!rs||ls.score<=KPT_MIN_SCORE||rs.score<=KPT_MIN_SCORE) return null;
+  const vw=video.videoWidth||640;
+  if(!vw) return null;
+  const shoulderRatio=dist(ls,rs)/vw;
+  if(shoulderRatio>0.5) return lost('您距离摄像头太近了，请往后退一步，让身体完整入镜');
+  if(shoulderRatio<0.09) return lost('您距离摄像头太远，关键点定位会不够精准，请靠近一些');
+  return null;
+}
+function evaluateAndFeedback(m){
+  const ex=EXERCISES[State.exIndex];
+  const frameIssue=checkFraming(m);
+  let r=frameIssue||ex.evaluate(m);
+  if(r.status!=='lost') r=adaptiveScore(r);
+  if(State.calibrationActive){
+    const v=currentMetric(r); if(v!=null) State.calibrationSamples.push(v);
+    const elapsed=(performance.now()-State.calibrationStart)/1000;
+    qualityPhase.textContent='校准 '+Math.max(0,Math.ceil(6-elapsed))+'s';
+    if(elapsed>=6) finishCalibration();
+    updateQuality(r,m); updatePhase(r); renderAngles(r);
+    return;
+  }
+  if(State.resting){ renderAngles(r); return; }
+  updateQuality(r,m); updatePhase(r);
+  updateFeedback(r);
+  // 计数逻辑：显式采用“中立位 → 目标位 → 保持 → 返回”的时序状态机。
+  const cfg=exerciseConfig();
+  if(ex.id==='sit-to-stand'){
+    if(r.status==='good'){
+      if(State.repPhase==='neutral') State.repPhase='target';
+      if(State.repPhase==='target' && !State.repHoldStart) State.repHoldStart=performance.now();
+      if(State.repPhase==='target' && performance.now()-State.repHoldStart>=cfg.holdSec*1000) State.repPhase='return';
+    }else if(State.repPhase==='return' && currentMetric(r)!=null && currentMetric(r)<=cfg.neutralMax){
+      completeRep(); resetRepState();
+    }
+  }else if(ex.id==='neck-lateral'){
+    const v=currentMetric(r), neutral=v!=null&&v<cfg.neutralMax, target=v!=null&&v>=cfg.target[0]&&v<=cfg.target[1];
+    // 固定时序：中立 → 左侧保持3秒 → 回中立 → 右侧保持3秒 → 回中立 → 完成1组。
+    if(neutral){
+      if(State.neckSequence==='left-return') State.neckSequence='right-ready';
+      else if(State.neckSequence==='right-return'){ completeRep(); State.neckSequence='neutral'; }
+      State.neckHoldStart=0;
+    }else if(target && r.neckDir){
+      if(State.neckSequence==='neutral' && r.neckDir==='L'){
+        if(!State.neckHoldStart) State.neckHoldStart=performance.now();
+        if((performance.now()-State.neckHoldStart)/1000>=cfg.holdSec){ State.neckSequence='left-return'; State.neckHoldStart=0; }
+      }else if(State.neckSequence==='right-ready' && r.neckDir==='R'){
+        if(!State.neckHoldStart) State.neckHoldStart=performance.now();
+        if((performance.now()-State.neckHoldStart)/1000>=cfg.holdSec){ State.neckSequence='right-return'; State.neckHoldStart=0; }
+      }
+    }
+  }else if(currentMetric(r)!=null && currentMetric(r)>=cfg.target[0] && currentMetric(r)<=cfg.target[1]){
+    if(State.repPhase==='neutral') State.repPhase='target';
+    if(State.repPhase==='target' && !State.repHoldStart) State.repHoldStart=performance.now();
+    if(State.repPhase==='target' && performance.now()-State.repHoldStart>=cfg.holdSec*1000) State.repPhase='return';
+  }else if(State.repPhase==='return' && currentMetric(r)!=null){
+    const v=currentMetric(r);
+    const returned = cfg.neutralMin!=null ? v>=cfg.neutralMin : v<=cfg.neutralMax;
+    if(returned){ completeRep(); resetRepState(); }
+  }
+  if(State.repPhase==='target' && State.repHoldStart) statHold.textContent=Math.min(cfg.holdSec,(performance.now()-State.repHoldStart)/1000).toFixed(1)+'s';
+  else if(ex.id==='neck-lateral' && State.neckHoldStart) statHold.textContent=Math.min(cfg.holdSec,(performance.now()-State.neckHoldStart)/1000).toFixed(1)+'s';
+
+}
+function resetRepState(){ State.repPhase='neutral'; State.repHoldStart=0; State.neckHoldStart=0; }
+function completeRep(){
+  State.count++; State.lastRepAt=Date.now();
+  updateStats();
+  say(msg('repComplete',State.count),true);
+  startRest();
+}
+function startRest(){
+  State.resting=true; State.restLeft=3;
+  restHint.classList.add('show'); restNum.textContent='3';
+  clearInterval(State.restTimerId);
+  State.restTimerId=setInterval(()=>{
+    State.restLeft--;
+    if(State.restLeft<=0){ clearInterval(State.restTimerId); State.resting=false; restHint.classList.remove('show'); }
+    else restNum.textContent=State.restLeft;
+  },1000);
+}
+function updateFeedback(r){
+  const st=r.status;
+  if(st!==lastStatus){ say(r.feedback); lastStatus=st; }
+  // 卡片样式与文案
+  feedbackCard.className='panel-card feedback-card '+st;
+  const stateMap={good:'标准',warn:'接近标准',bad:'需要纠正',lost:'未检测'};
+  const colorMap={good:'var(--good)',warn:'var(--warn)',bad:'var(--bad)',lost:'var(--lost)'};
+  feedbackState.style.color=colorMap[st];
+  feedbackState.textContent=stateMap[st];
+  feedbackMsg.textContent=r.feedback;
+  // 状态条
+  statusTag.className='status-tag '+st;
+  statusTag.textContent=stateMap[st];
+  statusText.textContent=r.feedback;
+  // 评分环
+  const displayScore=r.quality? r.quality.total : r.score;
+  scoreNum.textContent=Math.round(displayScore);
+  const circ=103.7, off=circ*(1-Math.min(100,displayScore)/100);
+  ringFg.style.strokeDashoffset=off;
+  ringFg.style.stroke=colorMap[st];
+  renderAngles(r);
+}
+function renderAngles(r){
+  if(r.a){
+    angleValA.textContent=r.a.val;
+    const pct=Math.min(100,Math.max(0,(r.a.val-r.a.min)/(r.a.max-r.a.min)*100));
+    angleFill.style.width=pct+'%';
+    const tgt=((r.a.min+r.a.max)/2-r.a.min)/(r.a.max-r.a.min)*100;
+    angleTarget.style.left=tgt+'%';
+  }else{ angleValA.textContent='–'; angleFill.style.width='0%'; }
+  if(r.b){
+    angleItemB.style.display='flex';
+    angleValB.textContent=r.b.val;
+  }else{ angleItemB.style.display='none'; }
+}
+function setStatus(st,text){
+  statusTag.className='status-tag '+st;
+  const map={good:'标准',warn:'接近',bad:'偏差',lost:'未检测'};
+  statusTag.textContent=map[st]||'等待';
+  statusText.textContent=text||'';
+}
+
+/* ===== 计时 ===== */
+function startTimer(){
+  clearInterval(State.timerId);
+  State.timerId=setInterval(updateStats,1000);
+}
+function fmtTime(ms){
+  const s=Math.floor(ms/1000), m=Math.floor(s/60), h=Math.floor(m/60);
+  const ss=String(s%60).padStart(2,'0'), mm=String(m%60).padStart(2,'0');
+  return h>0? h+':'+mm+':'+ss : mm+':'+ss;
+}
+function updateStats(){
+  statCount.textContent=State.count;
+  const t=elapsedMs();
+  timerChip.textContent=fmtTime(t);
+  statTime.textContent=fmtTime(t);
+  statHold.textContent=EXERCISES[State.exIndex].hold? State.holdTime.toFixed(1)+'s' : '—';
+  updateDisciplineUI();
+}
+
+/* ===== 动作坞渲染 ===== */
+const DOCK_ICONS={
+  'bobath-raise':'<circle cx="13" cy="4.5" r="2.3"/><path d="M13 7.5v8M13 9l-3.2-2.6M13 9l3.2-2.6M13 15.5l-2 6M13 15.5l2 6"/>',
+  'shoulder-flex':'<circle cx="13" cy="4.5" r="2.3"/><path d="M13 7.5v8M13 9l-2.8-1M13 9l3.2-3M13 15.5l-2 6M13 15.5l2 6"/>',
+  'elbow-flex':'<circle cx="13" cy="4" r="2.3"/><path d="M13 7v8M13 8.5L8 9.5M8 9.5l4 5M13 15l-2 6M13 15l2 6"/>',
+  'leg-raise':'<circle cx="13" cy="3.5" r="2.3"/><path d="M13 6.5v8M13 9l-3-2.5M13 9l3-2.5M13 14.5l-2.5 8M13 14.5l6-3.5"/>',
+  'sit-to-stand':'<circle cx="13" cy="3.5" r="2.3"/><path d="M13 6.5v8M13 8l-3-1.5M13 8l3-1.5M13 14.5l-2.5 6M13 14.5l2.5 6"/>',
+  'neck-lateral':'<circle cx="16" cy="3" r="2.6"/><path d="M13.5 6.5h5M13.5 9.5h5M13 6.5v9M13 15.5l-2 6M13 15.5l2 6"/>'
+};
+
+/* ===== 训练报告与可重复自检 ===== */
+function escapeHtml(v){return String(v==null?'':v).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
+function showTrainingReport(item){
+  if(!item||!reportModal||!reportContent) return;
+  const q=item.quality||{};
+  reportContent.innerHTML=`<div class="report-grid">
+    <div class="report-stat"><b>${fmtTime(Number(item.durationSec||0)*1000)}</b><span>训练时长</span></div>
+    <div class="report-stat"><b>${Number(item.count||0)}</b><span>完成次数</span></div>
+    <div class="report-stat"><b>${Number(q.total||0)}</b><span>平均动作质量</span></div>
+    <div class="report-stat"><b>${Number(q.samples||0)}</b><span>评价样本</span></div>
+  </div>
+  <div class="v7-meta"><span class="v7-chip">角度 ${Number(q.angle||0)}</span><span class="v7-chip">稳定性 ${Number(q.stability||0)}</span><span class="v7-chip">速度 ${Number(q.speed||0)}</span><span class="v7-chip">代偿 ${Number(q.compensation||0)}</span><span class="v7-chip">算法 ${escapeHtml(item.algorithmVersion||CONFIG.appVersion)}</span></div>
+  <p style="margin-top:14px;color:var(--muted);font-size:13px;line-height:1.7">动作：${escapeHtml(item.exercise||'训练')}。以上分数是本系统的工程评价指标，用于描述本次训练过程，不等同于 Fugl-Meyer、AROM、肌力或其他临床量表。</p>`;
+  reportModal.style.display='flex'; AppController.setPhase(APP_PHASE.REPORT,'report-open');
+}
+function closeTrainingReport(){ if(reportModal) reportModal.style.display='none'; if(AppController.phase===APP_PHASE.REPORT) AppController.setPhase(APP_PHASE.IDLE,'report-close'); }
+function runSelfTests(){
+  const results=[]; const add=(name,pass,detail)=>results.push({name,pass,detail});
+  try{ add('配置完整性',CONFIG.pose.minScore>0&&CONFIG.quality.angle+CONFIG.quality.stability+CONFIG.quality.speed+CONFIG.quality.compensation===1,'权重和 = 1'); }catch(e){add('配置完整性',false,e.message)}
+  try{ const p={x:0,y:0},q={x:1,y:0},r={x:1,y:1}; add('几何角度函数',Math.round(ang(p,q,r))===90,'期望 90°'); }catch(e){add('几何角度函数',false,e.message)}
+  try{ const z=scoreBand(80,[60,100],[40,120]); add('动作评分边界',z===100,'80 位于目标区间'); }catch(e){add('动作评分边界',false,e.message)}
+  try{ const rr={score:60,a:{val:75,min:60,max:100}}; State.calibration={min:70,max:90}; const ar=adaptiveScore(rr); add('个体化评分适配',ar.score>=60,'不会降低原始分数'); State.calibration=null; }catch(e){add('个体化评分适配',false,e.message)}
+  try{ add('浏览器摄像头 API',!!(navigator.mediaDevices&&typeof navigator.mediaDevices.getUserMedia==='function'),'HTTPS 页面可调用'); }catch(e){add('浏览器摄像头 API',false,e.message)}
+  try{ add('安全上下文',!!window.isSecureContext,'部署到 HTTPS 后应为 true'); }catch(e){add('安全上下文',false,e.message)}
+  try{ const q=summarizeQuality(); add('训练质量汇总',q&&Number.isFinite(q.total),'摘要函数可运行'); }catch(e){add('训练质量汇总',false,e.message)}
+  try{ add('动作参数集中配置',Object.keys(EXERCISE_CONFIG).length===EXERCISES.length,'6 个动作均有目标/保持/返回参数'); }catch(e){add('动作参数集中配置',false,e.message)}
+  try{ add('颈部保持规则',EXERCISE_CONFIG['neck-lateral'].holdSec===3,'侧屈每侧保持 3 秒'); }catch(e){add('颈部保持规则',false,e.message)}
+  testContent.innerHTML=results.map(x=>`<div class="test-row"><span>${escapeHtml(x.name)}<small style="display:block;color:var(--muted);font-weight:500">${escapeHtml(x.detail)}</small></span><b class="${x.pass?'test-pass':'test-fail'}">${x.pass?'PASS':'FAIL'}</b></div>`).join('');
+  testModal.style.display='flex';
+}
+const reportModal=$('reportModal'),reportContent=$('reportContent'),testModal=$('testModal'),testContent=$('testContent');
+$('reportClose')?.addEventListener('click',closeTrainingReport); $('testClose')?.addEventListener('click',()=>testModal.style.display='none');
+[reportModal,testModal].forEach(m=>m?.addEventListener('click',e=>{if(e.target===m){if(m===reportModal)closeTrainingReport();else m.style.display='none';}}));
+document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeTrainingReport();if(testModal)testModal.style.display='none';}});
+
+function renderDock(){
+  dockScroll.innerHTML='';
+  EXERCISES.forEach((ex,i)=>{
+    const b=document.createElement('button');
+    b.className='ex-card'+(i===State.exIndex?' active':'');
+    b.type='button';
+    b.innerHTML=`<span class="ex-check"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></span>
+      <div class="ex-ico"><svg viewBox="0 0 26 26" fill="none" stroke="#0E8A8A" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">${DOCK_ICONS[ex.id]}</svg></div>
+      <div class="ex-name">${ex.name}</div><div class="ex-cat">${ex.cat}</div>`;
+    b.addEventListener('click',()=>selectExercise(i));
+    dockScroll.appendChild(b);
+  });
+}
+function selectExercise(i){
+  if(State.running||State.videoOn){ toast('训练进行中不能直接切换动作，请先结束当前训练；这样可以避免一条训练记录混入多个动作的数据。'); return; }
+  if(EXERCISES[i]&&EXERCISES[i].id==='sit-to-stand'&&!State.sitOk){
+    State.sitOk=confirm('起立训练有跌倒风险：请确认椅子稳固、已有家属在旁保护。是否继续？');
+    if(!State.sitOk) return;
+  }
+  State.exIndex=i;
+  State.count=0; State.holdTime=0; State.holdReported=0; State.neckSide=null;
+  State.goodFrames=0,State.goodTime=0; State.resting=false; State.sitPhase='sit';
+  State.calibration=calibrationForExercise(); State.calibrationActive=false; State.metricHistory=[]; State.lastPrimaryMetric=null; State.phase='idle'; resetRepState(); State.neckSequence='neutral'; State.validQualityTime=0;
+  clearInterval(State.restTimerId); restHint.classList.remove('show');
+  resetPoseSmoothing();
+  renderDock(); renderExercise(); updateStats();
+  lastStatus='lost';
+  feedbackCard.className='panel-card feedback-card lost';
+  feedbackState.textContent=EXERCISES[i].hold?'保持训练':'次数训练';
+  feedbackState.style.color='var(--lost)';
+  feedbackMsg.textContent='已切换到「'+EXERCISES[i].name+'」，按右侧步骤开始训练';
+  if(State.running&&!State.paused) say('开始'+EXERCISES[i].name,true);
+}
+function renderExercise(){
+  const ex=EXERCISES[State.exIndex];
+  exName.textContent=ex.name; exEn.textContent=ex.en; catLabel.textContent=ex.cat;
+  goalLine.innerHTML='<b>目标：</b>'+ex.goal;
+  stepList.innerHTML=ex.steps.map((s,i)=>`<div class="step"><i>${i+1}</i><span>${s}</span></div>`).join('');
+  exIco.innerHTML=`<svg viewBox="0 0 26 26" fill="none" stroke="#0E8A8A" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">${DOCK_ICONS[ex.id]}</svg>`;
+  statHold.textContent=ex.hold?'0.0s':'—';
+}
+
+/* ===== 提示与杂项 ===== */
+let toastTimer=null;
+function toast(msg){
+  toastEl.textContent=msg; toastEl.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer=setTimeout(()=>toastEl.classList.remove('show'),3200);
+}
+voiceToggle.addEventListener('click',()=>{
+  State.voiceOn=!State.voiceOn;
+  voiceToggle.classList.toggle('active',State.voiceOn);
+  voiceLabel.textContent=State.voiceOn ? tr('语音提示 开') : tr('语音提示 关');
+  if(State.voiceOn) speak(tr('语音提示已开启'),true);
+});
+$('camErrorClose').addEventListener('click',hideCamError);
+document.querySelectorAll('.side-pick button').forEach(b=>{
+  b.addEventListener('click',()=>{
+    document.querySelectorAll('.side-pick button').forEach(x=>x.classList.toggle('active',x===b));
+    State.affectedSide=b.dataset.side;
+    State.sitPhase='sit';
+    toast('已切换患侧：'+({L:'左侧偏瘫',R:'右侧偏瘫',B:'双侧训练'})[b.dataset.side]);
+    if(State.running&&!State.paused) say(msg('affectedChanged'),true);
+  });
+});
+// 开始训练：直接响应用户点击，避免仅依赖 #camera-start 导致 Safari 只改地址却不启动。
+$('exportBtn').addEventListener('click',()=>{
+  const h=getHistory(); if(!h.length){ toast(tr('还没有训练记录')); return; }
+  const keys=[...new Set(h.flatMap(o=>Object.keys(o)))];
+  const q=v=>'"'+String(v==null?'':v).replace(/"/g,'""')+'"';
+  const csv='\ufeff'+[keys.join(',')].concat(h.map(o=>keys.map(k=>q(o[k])).join(','))).join('\n');
+  try{
+    const blob=new Blob([csv],{type:'text/csv;charset=utf-8'});
+    const url=URL.createObjectURL(blob);
+    const a=document.createElement('a'); a.href=url; a.download='training_log_'+localDateKey(Date.now())+'.csv';
+    a.rel='noopener'; document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(()=>URL.revokeObjectURL(url),1000);
+  }catch(e){ console.error(e); toast('导出失败，请稍后重试'); }
+});
+startBtn.addEventListener('click',(e)=>{
+  e.preventDefault();
+  if(startBtn.disabled || State.videoOn || State.running) return;
+  // 清除 hash，保证结束后再次点击仍然是一次新的用户手势。
+  if(location.hash==='#camera-start') history.replaceState(null,document.title,location.pathname+location.search);
+  startTrain();
+});
+calibrateBtn.addEventListener('click',beginCalibration);
+pauseBtn.addEventListener('click',togglePause);
+resetBtn.addEventListener('click',resetStats);
+endBtn.addEventListener('click',()=>endTraining('manual'));
+goalSelect.addEventListener('change',()=>setGoalMinutes(goalSelect.value));
+window.addEventListener('pagehide',()=>{ if(State.sessionStart && (State.running||State.videoOn)) recordSession('pagehide'); });
+window.addEventListener('beforeunload',()=>{ 
+  if(State.sessionStart && (State.running||State.videoOn)) recordSession('unload');
+  clearInterval(State.timerId); clearInterval(State.restTimerId); clearInterval(camRefreshId); stopCamera(); 
+});
+window.addEventListener('resize',()=>{ if(State.videoOn&&overlay.style.display!=='none') drawFrame(null); });
+
+/* ===== 预览模式（iframe）引导 ===== */
+if(inIframe()){
+  const fw=$('frameWarn');
+  if(fw){
+    fw.style.display='flex';
+    $('openNewTab').addEventListener('click',()=>{
+      // 直接从用户点击事件导航，移动端 Safari 比 window.open 更可靠。
+      const url=location.href;
+      try{
+        const w=window.open(url,'_blank','noopener,noreferrer');
+        if(!w) window.location.href=url;
+      }catch(e){
+        window.location.href=url;
+      }
+    });
+  }
+}
+
+/* ===== 初始化 ===== */
+renderDock();
+renderExercise();
+// 设备能力提示：不阻断训练，仅为研究/部署诊断提供信息。
+try{ window.RehabApp.device={isSecureContext:!!window.isSecureContext,mediaDevices:!!navigator.mediaDevices,speech:!!window.speechSynthesis,viewport:{width:window.innerWidth,height:window.innerHeight,dpr:window.devicePixelRatio||1}}; }catch(e){}
+try{ if(goalSelect) goalSelect.value=String(getGoalMinutes()); }catch(e){}
+State.calibration=calibrationForExercise();
+qualityPhase.textContent='待机';
+updateStats();
+updateDisciplineUI();
+demoLoop();
+
+</script>
+<script>
+/* ===== 多语言（中文 / English / 한국어）：未收录的文案自动回退为中文 ===== */
+(function(){
+const T={
+'卒中':['Stroke','뇌졸중'],'复康助手':[' Rehab Assistant',' 재활 도우미'],
+'脑卒中居家康复 · AI 动作实时指导':['Home stroke rehab · real-time AI movement guidance','뇌졸중 재가 재활 · AI 동작 실시간 지도'],
+'左侧偏瘫':['Left side affected','좌측 편마비'],'右侧偏瘫':['Right side affected','우측 편마비'],'双侧训练':['Both sides','양측 훈련'],
+'摄像头未开启':['Camera off','카메라 꺼짐'],'语音提示 开':['Voice on','음성 안내 켬'],'语音提示 关':['Voice off','음성 안내 끔'],
+'在新标签页打开':['Open in new tab','새 탭에서 열기'],'让摄像头看见你的动作':['Let the camera see your movement','카메라에 동작이 보이게 하세요'],
+'请坐于稳固椅子上或将全身（头到脚）置于画面中，保持光线充足。所有动作请缓慢进行，训练时建议家属在旁监护。':['Sit on a stable chair or keep your whole body in view, with good lighting. Move slowly, and have a family member nearby.','튼튼한 의자에 앉거나 전신이 화면에 보이게 하고 조명을 밝게 하세요. 모든 동작은 천천히 하고 가족이 곁에서 지켜보게 하세요.'],
+'开始训练':['Start training','훈련 시작'],'首次使用需允许摄像头权限，识别过程不离开你的设备':['Allow camera access on first use; recognition stays on your device','처음에는 카메라 권한을 허용해야 하며, 인식은 기기 안에서만 이루어집니다'],
+'① 坐稳或站稳':['① Sit or stand steadily','① 안정적으로 앉거나 서기'],'② 全身入镜':['② Keep your body in view','② 전신이 화면에 나오게 하기'],'③ 缓慢完成':['③ Move slowly','③ 천천히 수행하기'],
+'等待':['Waiting','대기'],'正在连接摄像头…':['Connecting camera…','카메라 연결 중…'],'角度':['Angle','각도'],
+'训练原则':['Principles','훈련 원칙'],'慢 · 稳 · 不疼痛':['Slow · Steady · Pain-free','천천히 · 안정적으로 · 통증 없이'],
+'建议家属在旁陪同':['Have family nearby','가족이 곁에 있기'],'结果仅供训练参考':['Results are for reference only','결과는 훈련 참고용입니다'],
+'当前动作':['Current exercise','현재 동작'],'实时反馈':['Live feedback','실시간 피드백'],'准备就绪':['Ready','준비 완료'],
+'选择动作并开始训练后，这里会实时显示你的动作质量与纠正建议。':['After you choose an exercise and start, your movement quality and corrections appear here.','동작을 고르고 훈련을 시작하면 동작 품질과 교정 안내가 여기에 표시됩니다.'],
+'训练统计':['Statistics','훈련 통계'],'完成次数':['Reps','완료 횟수'],'训练时长':['Duration','훈련 시간'],'达标保持':['Hold','유지 시간'],
+'暂停':['Pause','일시정지'],'继续':['Resume','계속'],'重置统计':['Reset','통계 초기화'],'结束训练':['End training','훈련 종료'],
+'连续训练与时间记录':['Streak & time log','연속 훈련 및 시간 기록'],'记录每次训练，帮助患者和家属了解训练坚持情况':['Each session is logged so patient and family can see consistency','매 훈련을 기록해 환자와 가족이 꾸준함을 확인할 수 있습니다'],
+'本次目标时长':['Session goal','이번 목표 시간'],'5 分钟':['5 min','5분'],'10 分钟':['10 min','10분'],'15 分钟':['15 min','15분'],'20 分钟':['20 min','20분'],
+'连续训练（天）':['Streak (days)','연속 훈련(일)'],'今日训练（分钟）':['Today (min)','오늘 훈련(분)'],'本周训练（分钟）':['This week (min)','이번 주 훈련(분)'],
+'最近训练':['Recent sessions','최근 훈련'],'导出训练记录（CSV）':['Export log (CSV)','훈련 기록 내보내기(CSV)'],'还没有训练记录':['No sessions yet','아직 훈련 기록이 없습니다'],
+'选择训练动作':['Choose an exercise','훈련 동작 선택'],'点击卡片切换 · 康复训练循序渐进，以医嘱为准':['Tap a card to switch · Progress gradually and follow medical advice','카드를 눌러 전환 · 점진적으로 진행하고 의사의 지시를 따르세요'],
+'安全提示：':['Safety: ','안전 안내: '],
+'本工具用于辅助脑卒中患者居家康复训练，不构成医疗诊断或治疗方案。训练前请咨询医生或康复治疗师；训练时建议家属在旁监护；出现头晕、胸闷、心悸、患肢疼痛加重等不适请立即停止。识别基于通用人体姿态模型，结果仅供参考。':['This tool assists home rehabilitation after stroke and is not a diagnosis or treatment plan. Consult a physician or therapist first, have family nearby, and stop at once if you feel dizzy, chest tightness, palpitations or increased pain. Recognition uses a general pose model; results are for reference only.','이 도구는 뇌졸중 환자의 재가 재활을 돕기 위한 것이며 진단이나 치료 계획이 아닙니다. 훈련 전 의사나 재활치료사와 상담하고, 가족이 곁에서 지켜보며, 어지러움·가슴 답답함·두근거림·통증 악화 시 즉시 중단하세요. 일반 자세 모델 기반이므로 결과는 참고용입니다.'],
+'正在准备…':['Preparing…','준비 중…'],'未检测':['No person','미검출'],'标准':['Good','표준'],'接近':['Close','근접'],'偏差':['Off','편차'],
+'未检测到人体，请调整位置站在画面中央':['No person detected. Move to the center of the frame.','사람이 감지되지 않습니다. 화면 중앙으로 이동하세요.'],
+'请退后一步，让上半身完整出现在画面中':['Step back so your upper body is fully in view.','한 걸음 물러나 상체가 화면에 모두 보이게 하세요.'],
+'非常标准，保持 2 秒后缓慢放下':['Excellent. Hold 2 seconds, then lower slowly.','아주 좋습니다. 2초 유지 후 천천히 내리세요.'],
+'手臂尽量伸直，如患侧紧张不要勉强':['Straighten your arm as far as comfortable; do not force it.','팔을 가능한 한 펴되 무리하지 마세요.'],
+'Bobath 握手前上举':['Bobath clasped-hands raise','바소 깍지 낀 손 올리기'],'患侧肩部前屈':['Affected shoulder flexion','마비측 어깨 굴곡'],'患侧肘关节屈伸':['Affected elbow flexion','마비측 팔꿈치 굴곡·신전'],
+'患侧直腿抬高':['Affected straight leg raise','마비측 다리 곧게 들기'],'坐位起立训练':['Sit to stand','앉았다 일어나기'],'颈部侧屈':['Lateral neck flexion','목 측굴'],'手臂前平举':['Forward arm raise','팔 앞으로 올리기'],
+'上肢康复':['Upper limb','상지 재활'],'下肢康复':['Lower limb','하지 재활'],'下肢与平衡':['Lower limb & balance','하지 및 균형'],'颈部康复':['Neck','목 재활']
+};
+const LC={zh:'zh-CN',en:'en-US',ko:'ko-KR'};
+let LANG='zh'; try{ LANG=localStorage.getItem('rehab_lang')||''; }catch(e){}
+window.REHAB_LANG=LANG;
+if(!LC[LANG]){ const n=(navigator.language||'').slice(0,2); LANG=n==='ko'?'ko':(n==='zh'?'zh':'en'); }
+window.REHAB_LANG=LANG;
+window.tr=z=>{ if(LANG==='zh') return z; const e=T[z]; return e?e[LANG==='en'?0:1]:z; };
+function x(n){
+  const v=n.nodeValue; let zh;
+  if(n.__o!==undefined && v===n.__o) zh=n.__z;
+  else { const m=v.trim(); if(!/[\u4e00-\u9fff]/.test(m)) return; zh=m; n.__z=zh; n.__p=v.match(/^\s*/)[0]; n.__s=v.match(/\s*$/)[0]; }
+  const out=n.__p+tr(zh)+n.__s;
+  n.__o=out; if(out!==v) n.nodeValue=out;
+}
+function walk(root,force){
+  const w=document.createTreeWalker(root,NodeFilter.SHOW_TEXT,{acceptNode:n=>/^(SCRIPT|STYLE)$/.test(n.parentNode.nodeName)?NodeFilter.FILTER_REJECT:NodeFilter.FILTER_ACCEPT});
+  let n; while((n=w.nextNode())){ if(force&&n.__z!==undefined) n.__o=n.nodeValue; x(n); }
+}
+function apply(){
+  document.documentElement.lang={zh:'zh-CN',en:'en',ko:'ko'}[LANG]; walk(document.body,true);
+  document.querySelectorAll('[aria-label]').forEach(el=>{ if(el.__a===undefined) el.__a=el.getAttribute('aria-label'); el.setAttribute('aria-label',tr(el.__a)); });
+}
+new MutationObserver(rs=>{ for(const r of rs){
+  if(r.type==='characterData') x(r.target);
+  else r.addedNodes.forEach(a=>{ if(a.nodeType===3) x(a); else if(a.nodeType===1) walk(a,false); });
+}}).observe(document.body,{childList:true,subtree:true,characterData:true});
+// 语音：播报文本先翻译，再由 speak() 使用当前语言的语音
+if(typeof say==='function'){
+  const _say = say;
+  say = (t,f) => _say(tr(t),f);
+}
+// 语言切换器
+const sel=document.createElement('select'); sel.setAttribute('aria-label','Language');
+sel.style.cssText='padding:6px 8px;border-radius:8px;font-size:14px';
+[['zh','中文'],['en','English'],['ko','한국어']].forEach(([v,l])=>{ const o=document.createElement('option'); o.value=v; o.textContent=l; sel.appendChild(o); });
+sel.value=LANG; (document.querySelector('.topbar-right')||document.body).prepend(sel);
+const testBtn=document.createElement('button'); testBtn.type='button'; testBtn.className='icon-btn'; testBtn.textContent='系统自检'; testBtn.setAttribute('aria-label','系统自检'); testBtn.addEventListener('click',runSelfTests); (document.querySelector('.topbar-right')||document.body).appendChild(testBtn);
+
+function updateVoiceLabel(){
+  if(voiceLabel){
+    voiceLabel.textContent = State.voiceOn
+      ? tr('语音提示 开')
+      : tr('语音提示 关');
+  }
+}
+
+sel.addEventListener('change',()=>{
+  LANG=sel.value; window.REHAB_LANG=LANG;
+  try{ localStorage.setItem('rehab_lang',LANG); }catch(e){}
+
+  // 切换语言时立即停止上一种语言尚未播完的语音，避免中英韩串音
+  try{ window.speechSynthesis?.cancel(); }catch(e){}
+  State.lastSpoke='';
+  State.lastSpokeAt=0;
+
+  apply();
+  updateVoiceLabel();
+});
+
+apply();
+updateVoiceLabel();
+})();
+</script>
+</body>
+</html>
